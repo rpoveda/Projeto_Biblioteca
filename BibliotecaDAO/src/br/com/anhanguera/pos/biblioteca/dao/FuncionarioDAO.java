@@ -116,11 +116,11 @@ public class FuncionarioDAO {
             "where d.codigochefedepartamento = f.numeromatricula) 'nome_chefedepartamento' " +
             "from funcionario f "+
             "join departamento d on d.codigodepartamento = f.codigodepartamento" +
-            "where f.numeromatricula like '%?%' and f.nomecompleto like '%?%' and f.codigodepartamento like '%?%'";
+            "where f.numeromatricula like ? and f.nomecompleto like ? and f.codigodepartamento like ?";
             stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, funcionario.getNumeroMatricula());
-            stmt.setString(2, funcionario.getNomeCompleto());
-            stmt.setInt(3, funcionario.getDepartamento().getCodigoDepartamento());
+            stmt.setString(1,"%" + funcionario.getNumeroMatricula() + "%");
+            stmt.setString(2,"%" +  funcionario.getNomeCompleto()+ "%");
+            stmt.setString(3,"%" +  funcionario.getDepartamento().getCodigoDepartamento()+ "%");
             ResultSet rs = stmt.executeQuery();
             while(rs.next()){
                 Funcionario f = new Funcionario();
