@@ -3,6 +3,7 @@ package br.com.anhanguera.pos.biblioteca.controller;
 import br.com.anhanguera.pos.biblioteca.dao.DepartamentoDAO;
 import br.com.anhanguera.pos.biblioteca.entidade.Departamento;
 import br.com.anhanguera.pos.biblioteca.entidade.Funcionario;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,12 +12,8 @@ import java.util.List;
  */
 public class DepartamentoController {
 
-    private Departamento departamento;
-    private Funcionario funcionario;
-    
     public DepartamentoController(){
-        this.departamento = new Departamento();
-        this.funcionario = new Funcionario();
+
     }
     
     public boolean insert(Departamento d){
@@ -28,5 +25,11 @@ public class DepartamentoController {
         }
     }
     
-    
+    public List<Departamento> selectAll(){
+        try{
+            return new DepartamentoDAO().selectAll();
+        }catch(Exception e){
+            return null;
+        }
+    }
 }

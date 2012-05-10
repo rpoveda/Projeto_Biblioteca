@@ -7,6 +7,7 @@ package br.com.anhanguera.pos.biblioteca.controller;
 import br.com.anhanguera.pos.biblioteca.dao.FuncionarioDAO;
 import br.com.anhanguera.pos.biblioteca.entidade.Departamento;
 import br.com.anhanguera.pos.biblioteca.entidade.Funcionario;
+import java.util.List;
 
 /**
  *
@@ -24,6 +25,22 @@ public class FuncionarioController {
             return new FuncionarioDAO().insert(f);
         }catch(Exception e){
             return false;
+        }
+    }
+    
+    public List<Funcionario> selectAll(){
+        try{
+            return new FuncionarioDAO().selectAll();
+        }catch(Exception e){
+            return null;
+        }
+    }
+    
+    public List<Funcionario> select(Funcionario f){
+        try{
+            return new FuncionarioDAO().select(f);
+        }catch(Exception e){
+            return null;
         }
     }
     
