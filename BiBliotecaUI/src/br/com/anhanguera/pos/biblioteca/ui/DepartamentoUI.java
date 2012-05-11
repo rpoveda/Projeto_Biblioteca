@@ -5,10 +5,12 @@
 package br.com.anhanguera.pos.biblioteca.ui;
 
 import br.com.anhanguera.pos.biblioteca.controller.DepartamentoController;
+import br.com.anhanguera.pos.biblioteca.controller.FuncionarioController;
 import br.com.anhanguera.pos.biblioteca.entidade.Departamento;
 import br.com.anhanguera.pos.biblioteca.entidade.Funcionario;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.List;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
@@ -117,43 +119,36 @@ public class DepartamentoUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadActionPerformed
-        String strNomeDepartamento = txtNomeDepartamento.getText();
-        int intCodigoChefe = Integer.parseInt(cbFuncionario.getSelectedItem().toString().split("-")[0].trim());
-        System.out.println(intCodigoChefe);
-        Departamento d = new Departamento();
-        Funcionario f = new Funcionario();
-        f.setNumeroMatricula(intCodigoChefe);
-        d.setNomeDepartamento(strNomeDepartamento);
-        d.setChefeDepartamento(f);
-        if(new DepartamentoController().insert(d)){
-            JOptionPane.showMessageDialog(null, "Cadastro efetuado com sucesso!");
-        }else
-        {
-            JOptionPane.showMessageDialog(null, "Nao foi possivel salvar!");
+        try{
+            String strNomeDepartamento = txtNomeDepartamento.getText();
+            int intCodigoChefe = Integer.parseInt(cbFuncionario.getSelectedItem().toString().split("-")[0].trim());
+            System.out.println(intCodigoChefe);
+            Departamento d = new Departamento();
+            Funcionario f = new Funcionario();
+            f.setNumeroMatricula(intCodigoChefe);
+            d.setNomeDepartamento(strNomeDepartamento);
+            d.setChefeDepartamento(f);
+            if(new DepartamentoController().insert(d)){
+                JOptionPane.showMessageDialog(null, "Cadastro efetuado com sucesso!");
+            }else
+            {
+                JOptionPane.showMessageDialog(null, "Nao foi possivel salvar!");
+            }
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, e.getMessage());
         }
     }//GEN-LAST:event_btnCadActionPerformed
 
     
     private void initComb(){
-        Funcionario f = new Funcionario();
-        f.setNomeComplet("Rafael");
-        f.setNumeroMatricula(123);
-        Funcionario f2 = new Funcionario();
-        f2.setNomeComplet("Joao");
-        f2.setNumeroMatricula(345);
-        DefaultComboBoxModel comboModel = (DefaultComboBoxModel) cbFuncionario.getModel();
-        //removendo todos os elementos do combo
-        /*        for (int linha = 0; linha < categorias.size(); linha++)
-        {
-            //pegando a categoria da lista
-            Categoria categoria = categorias.get(linha);
-            //adicionando a categoria no combo
-            comboModel.addElement(categoria);
-        }*/
-        comboModel.removeAllElements();
-        
-        comboModel.addElement(f.getNumeroMatricula() + " - " + f.getNomeCompleto());
-        comboModel.addElement(f2.getNumeroMatricula() + " - " + f2.getNomeCompleto());
+        DefaultComboBoxModel model = (DefaultComboBoxModel) cbFuncionario.getModel();
+        model.removeAllElements();
+        List<Funcionario> _lstFuncionario = new FuncionarioController().selectAll();
+        if(_lstFuncionario != null){
+            for(Funcionario f : _lstFuncionario){
+                model.addElement(f.getNumeroMatricula() + " - " + f.getNomeCompleto());
+            }
+        }
     }
     
     /**

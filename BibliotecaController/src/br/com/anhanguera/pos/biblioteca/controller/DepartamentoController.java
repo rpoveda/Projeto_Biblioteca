@@ -32,4 +32,12 @@ public class DepartamentoController {
             return null;
         }
     }
+    
+    public List<Departamento> select(Departamento d){
+        try{
+            return new DepartamentoDAO().select(d);
+        }catch(Exception e){
+            return null;
+        }
+    }
 }
