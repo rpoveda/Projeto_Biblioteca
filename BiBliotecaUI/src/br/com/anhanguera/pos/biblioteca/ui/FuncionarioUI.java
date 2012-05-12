@@ -117,7 +117,7 @@ public class FuncionarioUI extends javax.swing.JFrame {
             int intCodigoDepartamento = Integer.parseInt(cbDepartamento.getSelectedItem().toString().split("-")[0].trim());
             Departamento d = new Departamento();
             Funcionario f = new Funcionario();
-            f.setNumeroMatricula(intCodigoDepartamento);
+            f.setNumeroMatricula(intNumeroMatricula);
             f.setNomeComplet(strNomeCompleto);
             d.setCodigoDepartamento(intCodigoDepartamento);
             f.setDepartamento(d);

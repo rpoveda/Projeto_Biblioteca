@@ -24,6 +24,7 @@ public class FuncionarioController {
         {
             return new FuncionarioDAO().insert(f);
         }catch(Exception e){
+            System.out.println(e.getMessage());
             return false;
         }
     }
