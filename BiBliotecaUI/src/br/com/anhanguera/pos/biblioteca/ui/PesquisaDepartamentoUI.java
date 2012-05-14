@@ -76,6 +76,12 @@ public class PesquisaDepartamentoUI extends javax.swing.JFrame {
 
         jLabel1.setText("Código");
 
+        txtCodigo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCodigoActionPerformed(evt);
+            }
+        });
+
         jLabel2.setText("Departamento");
 
         jButton1.setText("Filtrar");
@@ -149,6 +155,10 @@ public class PesquisaDepartamentoUI extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void txtCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCodigoActionPerformed
 
     /**
      * @param args the command line arguments
