@@ -29,6 +29,33 @@ CREATE TABLE `funcionario` (
   PRIMARY KEY (`NumeroMatricula`),
   KEY `FKCodigoDepartamento` (`CodigoDepartamento`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1$$
+delimiter $$
 
+CREATE TABLE `autor` (
+  `CodigoAutor` int(11) NOT NULL AUTO_INCREMENT,
+  `NomeAutor` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`CodigoAutor`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1$$
 
+delimiter $$
+
+CREATE TABLE `obra` (
+  `CodigoObra` int(11) NOT NULL AUTO_INCREMENT,
+  `TituloObra` varchar(45) DEFAULT NULL,
+  `CodigoAutorPrincipal` int(11) DEFAULT NULL,
+  `AnoPublicacaoObra` varchar(5) DEFAULT NULL,
+  `SituacaoObra` varchar(30) DEFAULT NULL,
+  `CodigoEditoraObra` int(11) DEFAULT NULL,
+  PRIMARY KEY (`CodigoObra`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1$$
+
+delimiter $$
+
+CREATE TABLE `autor_obra` (
+  `CodigoAutorObra` int(11) NOT NULL AUTO_INCREMENT,
+  `CodigoAutor` int(11) DEFAULT NULL,
+  `CodigoObra` int(11) DEFAULT NULL,
+  `OrdemAutor` int(11) DEFAULT NULL,
+  PRIMARY KEY (`CodigoAutorObra`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1$$
 
