@@ -30,6 +30,7 @@ public class EditoraDAO {
             stmt.setString(1, editora.getNomeEditora());
             stmt.setString(2, editora.getCidadeEditora());
             stmt.execute();
+            editora = null;
             return true;
         }catch(Exception e){
             System.out.println(e.getMessage());
@@ -40,7 +41,7 @@ public class EditoraDAO {
         }
     }
     
-    public boolean alterar(Editora editora) throws SQLException{
+    public boolean alter(Editora editora) throws SQLException{
         try{
             String sql = "uptade editora set nomeeditora=? , cidadeeditora=? where codigoeditora=?";
             stmt = conn.prepareStatement(sql);
@@ -48,6 +49,7 @@ public class EditoraDAO {
             stmt.setString(2, editora.getCidadeEditora());
             stmt.setInt(3, editora.getCodigoEditora());
             stmt.execute();
+            editora = null;
             return true;
         }catch(Exception e){
             System.out.println(e.getMessage());
@@ -58,7 +60,7 @@ public class EditoraDAO {
         }
     }
     
-    public boolean deletar(int codigoEditora) throws SQLException{
+    public boolean delete(int codigoEditora) throws SQLException{
         try{
             String sql = "delete from editora where codigoeditora=?";
             stmt = conn.prepareStatement(sql);
@@ -80,11 +82,47 @@ public class EditoraDAO {
             stmt = conn.prepareStatement("select * from editora");
             ResultSet rs = stmt.executeQuery();
             
-            while(!rs.next()){
+            while(rs.next()){
                 Editora editora = new Editora();
                 editora.setCodigoEditora(rs.getInt("codigoeditora"));
+                editora.setNomeEditora(rs.getString("nomeeditora"));
+                editora.setCidadeEditora(rs.getString("cidadeeditora"));
+                _lstEditora.add(editora);
+                editora = null;
             }
             
+            return _lstEditora;
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+            return null;
+        }finally{
+            stmt.close();
+            conn.close();
+        }
+    }
+    
+    public List<Editora> select(Editora editora) throws SQLException{
+        try{
+            String sql = "select * from editora where "+
+                    "codigoeditora like ? and nomeeditora like ? and cidadeeditora like ? ";
+            String codigo = (editora.getCodigoEditora() == 0) ? "" : Integer.toString(editora.getCodigoEditora());
+            List<Editora> _lstEditora = new ArrayList<Editora>();
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, "%" + codigo + "%");
+            stmt.setString(2, "%" + editora.getNomeEditora() + "%");
+            stmt.setString(3, "%" + editora.getCidadeEditora() + "%");
+            ResultSet rs = stmt.executeQuery();
+            
+            while(rs.next())
+            {
+                Editora e = new Editora();
+                e.setCodigoEditora(rs.getInt("codigoeditora"));
+                e.setNomeEditora(rs.getString("nomeeditora"));
+                e.setCidadeEditora(rs.getString("cidadeeditora"));
+                _lstEditora.add(e);
+                e = null;
+            }
+            editora = null;
             return _lstEditora;
         }catch(Exception e){
             System.out.println(e.getMessage());

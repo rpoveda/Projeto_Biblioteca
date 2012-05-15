@@ -6,8 +6,8 @@ package br.com.anhanguera.pos.biblioteca.entidade;
  */
 public class Departamento {
     
-    private int codigoDepartamento;
-    private String nomeDepartamento;
+    private int codigoDepartamento = 0;
+    private String nomeDepartamento = "";
     private Funcionario chefeDepartamento;
     
     //gets and sets

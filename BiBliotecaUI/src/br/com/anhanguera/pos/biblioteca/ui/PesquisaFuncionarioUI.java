@@ -60,7 +60,7 @@ public class PesquisaFuncionarioUI extends javax.swing.JFrame {
         try{
             DefaultComboBoxModel comboModel = (DefaultComboBoxModel) cbDepartamento.getModel();
             comboModel.removeAllElements();
-
+            comboModel.addElement("");
             if(_lstDepartamento != null){
                 for(Departamento d : _lstDepartamento){
                 comboModel.addElement(d.getCodigoDepartamento() + " - " + d.getNomeDepartamento()); 
@@ -179,9 +179,13 @@ public class PesquisaFuncionarioUI extends javax.swing.JFrame {
 
     private void btnFiltroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFiltroActionPerformed
         try{
-            int intNumerRegistro = Integer.parseInt(txtRegistro.getText());
+            int intNumerRegistro = 0;
+            int intCodigoDepartamento = 0;
+            if(!txtRegistro.getText().equals(""))
+              intNumerRegistro = Integer.parseInt(txtRegistro.getText());
             String strNome = txtNome.getText();
-            int intCodigoDepartamento = Integer.parseInt(cbDepartamento.getSelectedItem().toString().split("-")[0].trim());
+            if(!cbDepartamento.getSelectedItem().toString().equals(""))
+                intCodigoDepartamento = Integer.parseInt(cbDepartamento.getSelectedItem().toString().split("-")[0].trim());
             
             Funcionario f = new Funcionario();
             f.setNumeroMatricula(intNumerRegistro);

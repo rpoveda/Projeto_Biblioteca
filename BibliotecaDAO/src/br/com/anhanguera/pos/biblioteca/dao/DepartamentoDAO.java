@@ -110,11 +110,12 @@ public class DepartamentoDAO {
         try{
             String sql = "select d.*, f.* from departamento d " +
                     "join funcionario f on f.numeromatricula = d.codigochefedepartamento "+
-                    "where d.nomedepartamento like ? and codigodepartamento like ?";
+                    "where d.nomedepartamento like ? and d.codigodepartamento like ?";
+            String codigo = (departamento.getCodigoDepartamento() == 0)? "" : Integer.toString(departamento.getCodigoDepartamento());
             List<Departamento> _lstDepartamento = new ArrayList<Departamento>();
             stmt = conn.prepareStatement(sql);
             stmt.setString(1, "%" + departamento.getNomeDepartamento() + "%");
-            stmt.setString(2, "%" + departamento.getCodigoDepartamento() + "%");
+            stmt.setString(2, "%" + codigo + "%");
             ResultSet rs = stmt.executeQuery();
             
             while(rs.next()){
@@ -131,7 +132,7 @@ public class DepartamentoDAO {
             
             return _lstDepartamento;
         }catch(Exception e){
-            throw new RuntimeException(e);
+            throw new RuntimeException(e.getMessage());
         }finally{
             conn.close();
             stmt.close();

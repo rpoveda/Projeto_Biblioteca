@@ -144,7 +144,7 @@ public class PesquisaDepartamentoUI extends javax.swing.JFrame {
         {
             Departamento d = new Departamento();
             
-            if(txtCodigo.getText().toString() != null)
+            if(!txtCodigo.getText().equals(""))
             {
                 d.setCodigoDepartamento(Integer.parseInt(txtCodigo.getText()));
             }

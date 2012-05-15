@@ -7,8 +7,8 @@ package br.com.anhanguera.pos.biblioteca.entidade;
 public class Editora {
 
     private int codigoEditora;
-    private String nomeEditora;
-    private String cidadeEditora;
+    private String nomeEditora = "";
+    private String cidadeEditora= "";
     
     ///gets and sets codigo
     public int getCodigoEditora(){
