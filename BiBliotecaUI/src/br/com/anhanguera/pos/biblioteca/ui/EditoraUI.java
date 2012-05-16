@@ -5,6 +5,7 @@
 package br.com.anhanguera.pos.biblioteca.ui;
 
 import br.com.anhanguera.pos.biblioteca.controller.EditoraController;
+import br.com.anhanguera.pos.biblioteca.controller.UtilController;
 import br.com.anhanguera.pos.biblioteca.dao.EditoraDAO;
 import br.com.anhanguera.pos.biblioteca.dao.UtilDAO;
 import br.com.anhanguera.pos.biblioteca.entidade.Editora;
@@ -25,7 +26,7 @@ public class EditoraUI extends javax.swing.JFrame {
     }
     
     private void initCodigo(){
-        int codigo = new UtilDAO().nextId("editora", "codigoeditora");
+        int codigo = new UtilController().nextId("editora", "codigoeditora");
         txtCodigo.setText(Integer.toString(codigo));
     }
 

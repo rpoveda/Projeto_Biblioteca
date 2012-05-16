@@ -6,6 +6,7 @@ package br.com.anhanguera.pos.biblioteca.ui;
 
 import br.com.anhanguera.pos.biblioteca.controller.DepartamentoController;
 import br.com.anhanguera.pos.biblioteca.controller.FuncionarioController;
+import br.com.anhanguera.pos.biblioteca.controller.UtilController;
 import br.com.anhanguera.pos.biblioteca.entidade.Departamento;
 import br.com.anhanguera.pos.biblioteca.entidade.Funcionario;
 import java.awt.event.ItemEvent;
@@ -28,6 +29,13 @@ public class DepartamentoUI extends javax.swing.JFrame {
     public DepartamentoUI() {
         initComponents();
         initComb();
+        initCodigo();
+    }
+    
+    private void initCodigo(){
+        int codigo = new UtilController().nextId("departamento", "codigodepartamento");
+        txtCodigoDepartamento.setText(Integer.toString(codigo));
+        
     }
 
     /**
@@ -54,6 +62,8 @@ public class DepartamentoUI extends javax.swing.JFrame {
         jLabel1.setText("Nome departamento");
 
         jLabel2.setText("Código");
+
+        txtCodigoDepartamento.setEditable(false);
 
         jLabel3.setText("Chefe do departamento");
 
