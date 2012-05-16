@@ -11,6 +11,7 @@ import br.com.anhanguera.pos.biblioteca.dao.UtilDAO;
 import br.com.anhanguera.pos.biblioteca.entidade.Departamento;
 import br.com.anhanguera.pos.biblioteca.entidade.Editora;
 import br.com.anhanguera.pos.biblioteca.entidade.Funcionario;
+import br.com.anhanguera.pos.biblioteca.entidade.SituacaoObra;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -21,11 +22,15 @@ import java.util.List;
 public class UtilDAOTest {
     
     public static void main(String[] args) throws SQLException{
-        Editora e = new Editora();
-        e.setCodigoEditora(1);
-        Departamento d = new Departamento();
-        Funcionario f = new Funcionario();
-        List<Funcionario> lst = new FuncionarioDAO().select(f);
+//        Editora e = new Editora();
+//        e.setCodigoEditora(1);
+//        Departamento d = new Departamento();
+//        Funcionario f = new Funcionario();
+//        List<Funcionario> lst = new FuncionarioDAO().select(f);
+        SituacaoObra so = SituacaoObra.Disponivel;
+        System.out.println(so);
+        System.out.println(so.toString());
+        
     }
     
 }

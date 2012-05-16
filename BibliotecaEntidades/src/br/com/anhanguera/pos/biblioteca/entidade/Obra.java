@@ -13,7 +13,7 @@ public class Obra {
     private Autor autorPrincipal;
     private List<Autor> todosAutores;
     private int anoPublicacao = 0;
-    private SituacaoObra situacaoObra;
+    private String situacaoObra;
     private Editora editoraObra;
     
     public int getAnoPublicacao() {
@@ -48,11 +48,11 @@ public class Obra {
         this.editoraObra = editoraObra;
     }
 
-    public SituacaoObra getSituacaoObra() {
+    public String getSituacaoObra() {
         return situacaoObra;
     }
 
-    public void setSituacaoObra(SituacaoObra situacaoObra) {
+    public void setSituacaoObra(String situacaoObra) {
         this.situacaoObra = situacaoObra;
     }
 
