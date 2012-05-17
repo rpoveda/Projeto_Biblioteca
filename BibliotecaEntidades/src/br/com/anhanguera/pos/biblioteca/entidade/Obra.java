@@ -13,7 +13,7 @@ public class Obra {
     private Autor autorPrincipal;
     private List<Autor> todosAutores;
     private int anoPublicacao = 0;
-    private String situacaoObra;
+    private String situacaoObra = "";
     private Editora editoraObra;
     
     public int getAnoPublicacao() {

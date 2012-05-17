@@ -148,12 +148,12 @@ public class ObraDAO {
                     Integer.toString(pObra.getEditoraObra().getCodigoEditora());
             
             stmt = conn.prepareStatement(sql);
-            stmt.setString(1, strCodigoObra);
-            stmt.setString(2, pObra.getTituloObra());
-            stmt.setString(3, strAnoPublicacao);
-            stmt.setString(4, pObra.getSituacaoObra());
-            stmt.setString(5, strCodigoAutor);
-            stmt.setString(6, strCodigoEditora);
+            stmt.setString(1, "%" + strCodigoObra + "%");
+            stmt.setString(2, "%" + pObra.getTituloObra() + "%");
+            stmt.setString(3, "%" + strAnoPublicacao + "%");
+            stmt.setString(4, "%" + pObra.getSituacaoObra() + "%");
+            stmt.setString(5, "%" + strCodigoAutor + "%");
+            stmt.setString(6, "%" + strCodigoEditora + "%");
             ResultSet rs = stmt.executeQuery();
             
            while(rs.next()){

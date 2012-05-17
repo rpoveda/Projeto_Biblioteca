@@ -21,7 +21,12 @@ public class UtilDAOTest {
 //        Departamento d = new Departamento();
 //        Funcionario f = new Funcionario();
 //        List<Funcionario> lst = new FuncionarioDAO().select(f);
-        List<Obra> _lstObra = new ObraDAO().selectAll();
+        Obra obra = new Obra();
+        Editora e = new Editora();
+        Autor a = new Autor();
+        obra.setEditoraObra(e);
+        obra.setAutorPrincipal(a);
+        List<Obra> _lstObra = new ObraDAO().select(obra);
         SituacaoObra so = SituacaoObra.Disponivel;
         System.out.println(so);
         System.out.println(so.toString());

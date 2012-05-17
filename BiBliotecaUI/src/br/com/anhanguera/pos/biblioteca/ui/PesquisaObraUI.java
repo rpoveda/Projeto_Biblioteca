@@ -31,6 +31,7 @@ public class PesquisaObraUI extends javax.swing.JFrame {
     
     private void intiTable(List<Obra> _lstObra){
         DefaultTableModel model = (DefaultTableModel) tblObra.getModel();
+        model.setRowCount(0);
         
         for(Obra obra : _lstObra){
             model.addRow(new Object[]{obra.getCodigoObra(), obra.getTituloObra(), obra.getAnoPublicacao(), obra.getSituacaoObra(), obra.getAutorPrincipal().getNomeAutor(), obra.getEditoraObra().getNomeEditora()});
