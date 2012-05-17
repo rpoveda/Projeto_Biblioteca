@@ -4,14 +4,8 @@
  */
 package br.com.anhanguera.pos.biblioteca.dao.test;
 
-import br.com.anhanguera.pos.biblioteca.dao.DepartamentoDAO;
-import br.com.anhanguera.pos.biblioteca.dao.EditoraDAO;
-import br.com.anhanguera.pos.biblioteca.dao.FuncionarioDAO;
-import br.com.anhanguera.pos.biblioteca.dao.UtilDAO;
-import br.com.anhanguera.pos.biblioteca.entidade.Departamento;
-import br.com.anhanguera.pos.biblioteca.entidade.Editora;
-import br.com.anhanguera.pos.biblioteca.entidade.Funcionario;
-import br.com.anhanguera.pos.biblioteca.entidade.SituacaoObra;
+import br.com.anhanguera.pos.biblioteca.dao.*;
+import br.com.anhanguera.pos.biblioteca.entidade.*;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -27,6 +21,7 @@ public class UtilDAOTest {
 //        Departamento d = new Departamento();
 //        Funcionario f = new Funcionario();
 //        List<Funcionario> lst = new FuncionarioDAO().select(f);
+        List<Obra> _lstObra = new ObraDAO().selectAll();
         SituacaoObra so = SituacaoObra.Disponivel;
         System.out.println(so);
         System.out.println(so.toString());
