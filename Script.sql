@@ -59,3 +59,10 @@ CREATE TABLE `autor_obra` (
   PRIMARY KEY (`CodigoAutorObra`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1$$
 
+CREATE TABLE `exemplar` (
+  `CodigoExemplar` int(11) NOT NULL,
+  `CodigoObra` int(11) NOT NULL,
+  `DataAquisicaoExemplar` datetime DEFAULT NULL,
+  `SituacaoExemplar` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`CodigoExemplar`,`CodigoObra`)
+)
