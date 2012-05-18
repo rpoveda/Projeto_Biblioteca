@@ -38,4 +38,16 @@ public class UtilDAO {
         }
     }
     
+        public static java.sql.Date convertDataForDateSql(java.util.Date data){
+        try{
+            
+            java.sql.Date dataSql = new java.sql.Date(data.getTime());
+            return dataSql;
+            
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+    
 }

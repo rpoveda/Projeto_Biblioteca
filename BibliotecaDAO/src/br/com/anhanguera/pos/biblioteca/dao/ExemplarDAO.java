@@ -26,7 +26,7 @@ public class ExemplarDAO {
             stmt = conn.prepareStatement(sql);
             stmt.setInt(1, exemplar.getCodigoExemplar());
             stmt.setInt(2, exemplar.getObra().getCodigoObra());
-            stmt.setDate(3, (Date)exemplar.getDataAquisicaoExemplar());
+            stmt.setDate(3, UtilDAO.convertDataForDateSql(exemplar.getDataAquisicaoExemplar()));
             stmt.setString(4, exemplar.getSituacaoExemplar());
             stmt.execute();
             return true;
@@ -39,7 +39,7 @@ public class ExemplarDAO {
         }
     }
     
-    public boolean update(Exemplar exemplar) throws SQLException{
+    public boolean alter(Exemplar exemplar) throws SQLException{
         try{
             String sql = "update exemplar set dataaquisicaoexemplar = ? , situacaoexemplar = ? where "+
                     "codigoexemplar = ? and codigoobra = ?";
@@ -104,6 +104,47 @@ public class ExemplarDAO {
             String sql = " select e.*,o.* from exemplar e " + 
                     " join obra o on o.codigoobra = e.codigoobra ";
             stmt = conn.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+            
+            while(rs.next()){
+                Exemplar exemplar = new Exemplar();
+                Obra obra = new Obra();
+                
+                exemplar.setCodigoExemplar(rs.getInt("codigoexemplar"));
+                exemplar.setDataAquisicaoExemplar(rs.getDate("dataaquisicaoexemplar"));
+                exemplar.setSituacaoExemplar(rs.getString("situacao"));
+                
+                obra.setCodigoObra(rs.getInt("codigoobra"));
+                obra.setTituloObra(rs.getString("tituloobra"));
+                exemplar.setObra(obra);
+                
+                _lstExemplar.add(exemplar);
+            }
+            
+            return _lstExemplar;
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+            return null;
+        }finally{
+            stmt.close();
+            conn.close();
+        }
+    }
+    
+    public List<Exemplar> select(Exemplar pExemplar) throws SQLException{
+        try{
+            List<Exemplar> _lstExemplar = new ArrayList<Exemplar>();
+            String sql = "select e.*, o.* from exemplar e " + 
+                    " join obra o on o.codigoobra = e.codigoobra " +
+                    " where e.codigoexemplar like '%%' and o.codigoobra like '%%' " +
+                    " and o.tituloobra like '%%' ";
+            
+            String strCodigoExemplar = pExemplar.getCodigoExemplar() == 0 ? "" : Integer.toString(pExemplar.getCodigoExemplar());
+            String strCodigoObra = pExemplar.getObra().getCodigoObra() == 0 ? "" : Integer.toString(pExemplar.getObra().getCodigoObra());
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, strCodigoExemplar);
+            stmt.setString(2, strCodigoObra);
+            stmt.setString(3, pExemplar.getObra().getTituloObra());
             ResultSet rs = stmt.executeQuery();
             
             while(rs.next()){
