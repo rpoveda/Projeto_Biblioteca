@@ -8,6 +8,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -42,8 +44,10 @@ public class EditoraDAO {
     }
     
     public boolean alter(Editora editora) throws SQLException{
+        //ResultSet rs;
         try{
-            String sql = "uptade editora set nomeeditora=? , cidadeeditora=? where codigoeditora=?";
+
+            String sql = "update editora set nomeeditora=? , cidadeeditora=? where codigoeditora=?";
             stmt = conn.prepareStatement(sql);
             stmt.setString(1, editora.getNomeEditora());
             stmt.setString(2, editora.getCidadeEditora());
@@ -131,5 +135,42 @@ public class EditoraDAO {
             stmt.close();
             conn.close();
         }
+    }
+    
+    public boolean exist(int pcodigoEditora) throws SQLException{
+        try{
+            String sql = "select nomeeditora from editora where codigoeditora=?";
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, pcodigoEditora);
+            ResultSet rs = stmt.executeQuery();
+            if(!rs.next())
+                return false;
+            else
+                return true;
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+            return false;
+        }finally{
+            stmt.close();
+            conn.close();
+        }
+    }
+    
+    public void TruncaTable(){
+        try{
+            String sql = "truncate table editora";
+            stmt = conn.prepareStatement(sql);
+            stmt.execute();
+            stmt.close();
+            conn.close();
+        }catch(Exception e){
+            try {
+                stmt.close();
+                conn.close();
+            } catch (SQLException ex) {
+               System.out.println(ex.getMessage());
+            }
+        }
+        
     }
 }
