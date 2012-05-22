@@ -25,16 +25,21 @@ public class EditoraControllerTest {
 
     @BeforeClass
     public static void setUpClass() throws Exception {
-        
+        //new EditoraController().TruncaTable();
     }
 
     @AfterClass
     public static void tearDownClass() throws Exception {
-        new EditoraController().TruncaTable();
+        //new EditoraController().TruncaTable();
     }
     
     @Before
     public void setUp() {
+        new EditoraController().TruncaTable();
+        editora = new Editora();
+        editora.setNomeEditora("Editora de teste");
+        editora.setCidadeEditora("Sorocaba");
+        new EditoraController(editora).insert();
         editora = new Editora();
         _lst = new ArrayList<Editora>();
     }
@@ -186,23 +191,8 @@ public class EditoraControllerTest {
     
     @Test
     public void selecionaTodasEditoras() {
-        EditoraController instance = new EditoraController();
-        List expResult = null;
-        List result = instance.selectAll();
-        Assert.assertNotNull(result);
+        _lst = new EditoraController().selectAll();
+        editora = _lst.get(0);
+        assertEquals(1, editora.getCodigoEditora());
     }
-
-    /**
-     * Test of select method, of class EditoraController.
-     */
-    /*@Test
-    public void testSelect() {
-        System.out.println("select");
-        EditoraController instance = new EditoraController();
-        List expResult = null;
-        List result = instance.select();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }*/
 }
