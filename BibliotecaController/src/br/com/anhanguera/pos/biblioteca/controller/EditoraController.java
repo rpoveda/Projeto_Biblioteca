@@ -22,9 +22,15 @@ public class EditoraController {
     public boolean insert(){
         try{
             if(this.editora.getNomeEditora().equals(null))
+            { 
+                EditoraController.msgErro = "O campo nome é obrigatório.";
                 return false;
+            }
             else if(this.editora.getCidadeEditora().equals(null))
+            {
+                EditoraController.msgErro = "O campo cidade é obrigatório";
                 return false;
+            }
             else
                 return new EditoraDAO().insert(this.editora);
         }catch(Exception e){

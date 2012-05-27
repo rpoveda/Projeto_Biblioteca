@@ -35,17 +35,17 @@ public class EditoraControllerTest {
     
     @Before
     public void setUp() {
-        new EditoraController().TruncaTable();
+        
         editora = new Editora();
         editora.setNomeEditora("Editora de teste");
         editora.setCidadeEditora("Sorocaba");
         new EditoraController(editora).insert();
-        editora = new Editora();
         _lst = new ArrayList<Editora>();
     }
     
     @After
     public void tearDown() {
+        new EditoraController().TruncaTable();
         editora = null;
         result = false;
         _lst = null;
@@ -187,6 +187,24 @@ public class EditoraControllerTest {
         editora.setNomeEditora("Editora de teste");
          _lst = new EditoraController(this.editora).select();
         assertEquals(false, _lst.isEmpty());
+    }
+    @Test
+    public void selecionaEditoraComNomeInexistente(){
+        editora.setNomeEditora("Essa ediroa nao existe");
+        _lst = new EditoraController(this.editora).select();
+        assertEquals(true,_lst.isEmpty());
+    }
+    @Test
+    public void selecionaEditoraPorCidade(){
+        editora.setCidadeEditora("Sorocaba");
+        _lst = new EditoraController(this.editora).select();
+        assertEquals(false, _lst.isEmpty());
+    }
+    @Test
+    public void selecionaEditoraComCidadeInexistente(){
+        editora.setCidadeEditora("Rio de Janeiro");
+        _lst = new EditoraController(this.editora).select();
+        assertEquals(true, _lst.isEmpty());
     }
     
     @Test

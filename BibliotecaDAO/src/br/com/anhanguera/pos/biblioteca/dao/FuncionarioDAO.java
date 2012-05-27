@@ -148,4 +148,37 @@ public class FuncionarioDAO {
             stmt.close();
         }
     }
+    
+    public boolean exist(int pintNumMatricula) throws SQLException{
+        try{
+            boolean b = false;
+            String sql = "select nomecomplete from funcionario where numeromatricula=?";
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, pintNumMatricula);
+            ResultSet rs = stmt.executeQuery();
+            if(rs.next()){
+                b = true;
+            }
+            return b;
+        }catch(Exception e){
+            return false;
+        }finally{
+            stmt.close();
+            conn.close();
+        }
+    }
+    
+    public void TruncateTable() throws SQLException{
+        try{
+            String sql = "truncate table funcionario";
+            stmt = conn.prepareStatement(sql);
+            stmt.execute();
+        }catch(Exception e)
+        {
+            System.out.println(e.getMessage());
+        }finally{
+            stmt.close();
+            conn.close();
+        }
+    }
 }
