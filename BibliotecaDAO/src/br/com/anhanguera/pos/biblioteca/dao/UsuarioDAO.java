@@ -126,13 +126,14 @@ public class UsuarioDAO {
                     + " and e.estadoendereco like ? and e.cependereco like ? ";
             String strCodigoUsuario = (pusuario.getCodigoUsuario() == 0) ? "" : Integer.toString(pusuario.getCodigoUsuario());
             String strCpfUsuario = (pusuario.getCpfUsuario() == 0) ? "" : Integer.toString(pusuario.getCpfUsuario());
-            stmt.setString(1, strCodigoUsuario);
-            stmt.setString(2, pusuario.getNomeUsuario());
-            stmt.setString(3, strCpfUsuario);
-            stmt.setString(4, pusuario.getEndereco().getCidade());
-            stmt.setString(5, pusuario.getEndereco().getEstado());
-            stmt.setString(6, pusuario.getEndereco().getCepEndereco());
             stmt = conn.prepareStatement(sql);
+            stmt.setString(1, "%" +  strCodigoUsuario + "%");
+            stmt.setString(2, "%" + pusuario.getNomeUsuario() + "%");
+            stmt.setString(3, "%" + strCpfUsuario + "%");
+            stmt.setString(4, "%" + pusuario.getEndereco().getCidade() + "%");
+            stmt.setString(5, "%" + pusuario.getEndereco().getEstado() + "%");
+            stmt.setString(6, "%" + pusuario.getEndereco().getCepEndereco() + "%");
+            
             ResultSet rs = stmt.executeQuery();
             
             while(rs.next()){
