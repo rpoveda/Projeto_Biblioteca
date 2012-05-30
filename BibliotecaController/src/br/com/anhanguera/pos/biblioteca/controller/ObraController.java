@@ -10,33 +10,56 @@ import java.util.List;
  */
 public class ObraController {
     
-    private Obra obra;
+    public static String msg = "O campo {CAMPO} é obrigatório.";
     
-    public ObraController(Obra obra){
-        this.obra = obra;
+    private static boolean isValid(Obra obra, boolean bValidaCodigo){
+        if(bValidaCodigo && obra.getCodigoObra() == 0)
+        { msg.replace("{CAMPO}", "Código");   return false; }
+        else if(obra.getTituloObra().equals(null))
+        { msg.replace("{CAMPO}", "Titulo");   return false; }
+        else if(obra.getAutorPrincipal().getCodigoAutor() == 0)
+        { msg.replace("{CAMPO}", "Autor");   return false; }
+        else if(obra.getSituacaoObra().equals(null))
+        { msg.replace("{CAMPO}", "Situação");   return false; }
+        else if(obra.getEditoraObra().getCodigoEditora() == 0)
+        { msg.replace("{CAMPO}", "Editora");   return false; }
+        else
+            return true;
     }
     
     public ObraController(){ }
     
-    public boolean insert(){
+    public boolean insert(Obra obra){
         try{
+            
+            if(!isValid(obra,false))
+                return false;
+            
             return new ObraDAO().insert(obra);
         }catch(Exception e){
             return false;
         }
     }
     
-    public boolean alter(){
+    public boolean alter(Obra obra){
         try{
+            
+            if(!isValid(obra, true))
+                return false;
+            
             return new ObraDAO().alter(obra);
         }catch(Exception e){
             return false;
         }
     }
     
-    public boolean delete(int codigoObra){
+    public boolean delete(int pintCodigoObra){
         try{
-            return new ObraDAO().delete(codigoObra);
+            
+            if(pintCodigoObra == 0)
+                return false;
+            
+            return new ObraDAO().delete(pintCodigoObra);
         }catch(Exception e){
             return false;
         }
@@ -51,7 +74,7 @@ public class ObraController {
         }
     }
     
-    public List<Obra> select(){
+    public List<Obra> select(Obra obra){
         try{
             return new ObraDAO().select(obra);
         }catch(Exception e){

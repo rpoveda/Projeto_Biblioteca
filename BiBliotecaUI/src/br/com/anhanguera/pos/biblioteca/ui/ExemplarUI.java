@@ -131,7 +131,7 @@ public class ExemplarUI extends javax.swing.JFrame {
         exemplar.setDataAquisicaoExemplar(UtilController.convertDate(txtDtAquisicao.getText()));
         exemplar.setSituacaoExemplar(cbxSituacao.getSelectedItem().toString());
         exemplar.setObra(obra);
-        if(new ExemplarController(exemplar).insert())
+        if(new ExemplarController().insert(exemplar))
             JOptionPane.showMessageDialog(null, "Exemplar cadastrado com sucesso.");
         else
             JOptionPane.showMessageDialog(null, "Não foi possível salvar o exemplar.");

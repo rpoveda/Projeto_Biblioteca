@@ -229,7 +229,7 @@ public class PesquisaObraUI extends javax.swing.JFrame {
         obra.setSituacaoObra(cbxSituacao.getSelectedItem().toString());
         
         
-        intiTable(new ObraController(obra).select());
+        intiTable(new ObraController().select(obra));
     }//GEN-LAST:event_btnFiltroActionPerformed
 
     /**

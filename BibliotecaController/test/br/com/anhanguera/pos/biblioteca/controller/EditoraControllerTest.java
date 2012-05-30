@@ -39,7 +39,7 @@ public class EditoraControllerTest {
         editora = new Editora();
         editora.setNomeEditora("Editora de teste");
         editora.setCidadeEditora("Sorocaba");
-        new EditoraController(editora).insert();
+        new EditoraController().insert(editora);
         _lst = new ArrayList<Editora>();
     }
     
@@ -59,7 +59,7 @@ public class EditoraControllerTest {
         //System.out.println("insert com todos os campos");
         editora.setNomeEditora("Editora test");
         editora.setCidadeEditora("Sao Paulo");
-        boolean result = new EditoraController(editora).insert();
+        boolean result = new EditoraController().insert(editora);
         assertEquals(true, result);
     }
     
@@ -68,7 +68,7 @@ public class EditoraControllerTest {
         //System.out.println("insert sem nome editora");
         editora.setNomeEditora(null);
         editora.setCidadeEditora("Sao Paulo");
-        result = new EditoraController(editora).insert();
+        result = new EditoraController().insert(editora);
         assertEquals(false, result);
     }
     
@@ -76,14 +76,14 @@ public class EditoraControllerTest {
     public void inserirEditoraSemCidade(){
         editora.setNomeEditora("Editora teste");
         editora.setCidadeEditora(null);
-        result = new EditoraController(editora).insert();
+        result = new EditoraController().insert(editora);
         assertEquals(false, result);
     }
     @Test
     public void inserirEditoraSemNomESemCidade(){
         editora.setNomeEditora(null);
         editora.setCidadeEditora(null);
-        result = new EditoraController(editora).insert();
+        result = new EditoraController().insert(editora);
         assertEquals(false, result);
     }
     
@@ -92,7 +92,7 @@ public class EditoraControllerTest {
         editora.setCodigoEditora(1);
         editora.setNomeEditora("Editora de teste");
         editora.setCidadeEditora("Sorocaba");
-        result = new EditoraController(editora).alter();
+        result = new EditoraController().alter(editora);
         assertEquals(true, result);
     }
     @Test
@@ -100,7 +100,7 @@ public class EditoraControllerTest {
         //editora.setCodigoEditora(0);
         editora.setNomeEditora("Editora de teste");
         editora.setCidadeEditora("Sorocaba");
-        result = new EditoraController(editora).alter();
+        result = new EditoraController().alter(editora);
         assertEquals(false, result);
     }
     @Test
@@ -108,7 +108,7 @@ public class EditoraControllerTest {
         editora.setCodigoEditora(0);
         editora.setNomeEditora("Editora de teste");
         editora.setCidadeEditora("Sorocaba");
-        result = new EditoraController(editora).alter();
+        result = new EditoraController().alter(editora);
         assertEquals(false, result);
     }
     @Test
@@ -116,7 +116,7 @@ public class EditoraControllerTest {
         editora.setCodigoEditora(1);
         editora.setNomeEditora(null);
         editora.setCidadeEditora("Sorocaba");
-        result = new EditoraController(editora).alter();
+        result = new EditoraController().alter(editora);
         assertEquals(false, result);
     }
     @Test
@@ -124,12 +124,12 @@ public class EditoraControllerTest {
         editora.setCodigoEditora(2);
         editora.setNomeEditora("Editora de teste");
         editora.setCidadeEditora(null);
-        result = new EditoraController(editora).alter();
+        result = new EditoraController().alter(editora);
         assertEquals(false, result);
     }
     @Test
     public void alterarEditoraSemInformacao(){
-        result = new EditoraController(editora).alter();
+        result = new EditoraController().alter(editora);
         assertEquals(false, result);
     }
     @Test
@@ -137,7 +137,7 @@ public class EditoraControllerTest {
         editora.setCodigoEditora(0);
         editora.setNomeEditora(null);
         editora.setCidadeEditora(null);
-        result = new EditoraController(editora).alter();
+        result = new EditoraController().alter(editora);
         assertEquals(false, result);
     }
     @Test
@@ -145,7 +145,7 @@ public class EditoraControllerTest {
         editora.setCodigoEditora(50);
         editora.setNomeEditora("Editora que nao existe");
         editora.setCidadeEditora("Sorocaba");
-        result = new EditoraController(editora).alter();
+        result = new EditoraController().alter(editora);
         assertEquals(false, result);
     }
     
@@ -167,43 +167,43 @@ public class EditoraControllerTest {
     
     @Test
     public void selecionaSemParametros(){
-        _lst = new EditoraController(new Editora()).select();
+        _lst = new EditoraController().select(new Editora());
         assertNotNull(_lst);
     }
     @Test
     public void selecionaEditoraPorCodigo(){
         editora.setCodigoEditora(1);
-        _lst = new EditoraController(this.editora).select();
+        _lst = new EditoraController().select(editora);
         assertEquals(false, _lst.isEmpty());
     }
     @Test
     public void selecionaEditoraComCodigoInexistente(){
         editora.setCodigoEditora(50);
-        _lst = new EditoraController(this.editora).select();
+        _lst = new EditoraController().select(editora);
         assertEquals(true, _lst.isEmpty());
     }
     @Test
     public void selecionaEditoraPorNome(){
         editora.setNomeEditora("Editora de teste");
-         _lst = new EditoraController(this.editora).select();
+         _lst = new EditoraController().select(editora);
         assertEquals(false, _lst.isEmpty());
     }
     @Test
     public void selecionaEditoraComNomeInexistente(){
         editora.setNomeEditora("Essa ediroa nao existe");
-        _lst = new EditoraController(this.editora).select();
+        _lst = new EditoraController().select(editora);
         assertEquals(true,_lst.isEmpty());
     }
     @Test
     public void selecionaEditoraPorCidade(){
         editora.setCidadeEditora("Sorocaba");
-        _lst = new EditoraController(this.editora).select();
+        _lst = new EditoraController().select(editora);
         assertEquals(false, _lst.isEmpty());
     }
     @Test
     public void selecionaEditoraComCidadeInexistente(){
         editora.setCidadeEditora("Rio de Janeiro");
-        _lst = new EditoraController(this.editora).select();
+        _lst = new EditoraController().select(editora);
         assertEquals(true, _lst.isEmpty());
     }
     

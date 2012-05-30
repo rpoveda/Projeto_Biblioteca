@@ -133,7 +133,7 @@ public class EditoraUI extends javax.swing.JFrame {
         editora.setNomeEditora(txtNomeEditora.getText());
         editora.setCidadeEditora(txtCidadeEditora.getText());
         
-        if(new EditoraController(editora).insert())
+        if(new EditoraController().insert(editora))
         {
             JOptionPane.showMessageDialog(null, "Editora salva com sucesso.");
         }else{

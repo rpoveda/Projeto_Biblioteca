@@ -196,7 +196,7 @@ public class ObraUI extends javax.swing.JFrame {
         editora.setCodigoEditora(intCodigoeditora);
         obra.setEditoraObra(editora);
         
-        if(new ObraController(obra).insert())
+        if(new ObraController().insert(obra))
             JOptionPane.showMessageDialog(null, "Obra cadastrada com sucesso.");
         else
             JOptionPane.showMessageDialog(null, "Não foi possível salvar a obra.");

@@ -136,7 +136,7 @@ public class PesquisaEditoraUI extends javax.swing.JFrame {
             editora.setCodigoEditora(Integer.parseInt(txtCodigo.getText()));
         editora.setNomeEditora(txtNomeEditora.getText());
         editora.setCidadeEditora(txtCidadeEditora.getText());
-        initTable(new EditoraController(editora).select());
+        initTable(new EditoraController().select(editora));
         editora = null;
     }//GEN-LAST:event_btnFiltroActionPerformed
 

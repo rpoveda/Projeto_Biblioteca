@@ -10,47 +10,45 @@ import java.util.List;
  */
 public class EditoraController {
     
-    private Editora editora;
-    public static String msgErro = "";
+    public static String msg = "O campo {CAMPO} é obrigatório.";
     
-    public EditoraController(Editora editora){
-        this.editora = editora;
+    private static boolean isValid(Editora e, boolean bValidaCodigo){
+        
+        if(bValidaCodigo && e.getCodigoEditora() == 0)
+        { msg.replace("{CAMPO}", "Código"); return false; }
+        else if (e.getNomeEditora().equals(null))
+        { msg.replace("{CAMPO}", "Nome"); return false; }
+        else if (e.getCidadeEditora().equals(null))
+        { msg.replace("{CAMPO}", "Cidade"); return false; }
+        else
+            return true;
     }
+    
     
     public EditoraController(){}
     
-    public boolean insert(){
+    public boolean insert(Editora editora){
         try{
-            if(this.editora.getNomeEditora().equals(null))
-            { 
-                EditoraController.msgErro = "O campo nome é obrigatório.";
+            
+            if(!isValid(editora, false))
                 return false;
-            }
-            else if(this.editora.getCidadeEditora().equals(null))
-            {
-                EditoraController.msgErro = "O campo cidade é obrigatório";
-                return false;
-            }
-            else
-                return new EditoraDAO().insert(this.editora);
+            
+            return new EditoraDAO().insert(editora);
         }catch(Exception e){
             return false;
         }
     }
     
-    public boolean alter(){
+    public boolean alter(Editora editora){
         try{
-            if(!new EditoraDAO().exist(this.editora.getCodigoEditora()))
+            
+            if(!isValid(editora, true))
                 return false;
             
-            if(this.editora.getCodigoEditora() == 0)
-                return false;
-            else if (this.editora.getNomeEditora().equals(null))
-                return false;
-            else if (this.editora.getCidadeEditora().equals(null))
+            if(!new EditoraDAO().exist(editora.getCodigoEditora()))
                 return false;
             else
-                return new EditoraDAO().alter(this.editora);
+                return new EditoraDAO().alter(editora);
         }catch(Exception e){
             return false;
         }
@@ -79,9 +77,9 @@ public class EditoraController {
         }
     }
     
-    public List<Editora> select(){
+    public List<Editora> select(Editora editora){
         try{
-            return new EditoraDAO().select(this.editora);
+            return new EditoraDAO().select(editora);
         }catch(Exception e){
             return null;
         }
