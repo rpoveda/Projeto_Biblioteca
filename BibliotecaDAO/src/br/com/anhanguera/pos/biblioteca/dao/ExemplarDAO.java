@@ -136,15 +136,16 @@ public class ExemplarDAO {
             List<Exemplar> _lstExemplar = new ArrayList<Exemplar>();
             String sql = "select e.*, o.* from exemplar e " + 
                     " join obra o on o.codigoobra = e.codigoobra " +
-                    " where e.codigoexemplar like '%%' and o.codigoobra like '%%' " +
-                    " and o.tituloobra like '%%' ";
+                    " where e.codigoexemplar like ? and o.codigoobra like ? " +
+                    " and o.tituloobra like '? and e.situacaoexemplar like ?";
             
             String strCodigoExemplar = pExemplar.getCodigoExemplar() == 0 ? "" : Integer.toString(pExemplar.getCodigoExemplar());
             String strCodigoObra = pExemplar.getObra().getCodigoObra() == 0 ? "" : Integer.toString(pExemplar.getObra().getCodigoObra());
             stmt = conn.prepareStatement(sql);
-            stmt.setString(1, strCodigoExemplar);
-            stmt.setString(2, strCodigoObra);
-            stmt.setString(3, pExemplar.getObra().getTituloObra());
+            stmt.setString(1, "%" + strCodigoExemplar + "%");
+            stmt.setString(2, "%" +  strCodigoObra + "%");
+            stmt.setString(3, "%" +  pExemplar.getObra().getTituloObra() + "%");
+            stmt.setString(4, "%" +  pExemplar.getSituacaoExemplar() + "%");
             ResultSet rs = stmt.executeQuery();
             
             while(rs.next()){
