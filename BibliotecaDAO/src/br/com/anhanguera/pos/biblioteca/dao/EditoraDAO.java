@@ -64,11 +64,11 @@ public class EditoraDAO {
         }
     }
     
-    public boolean delete(int codigoEditora) throws SQLException{
+    public boolean delete(int pintcodigoEditora) throws SQLException{
         try{
             String sql = "delete from editora where codigoeditora=?";
             stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, codigoEditora);
+            stmt.setInt(1, pintcodigoEditora);
             stmt.execute();
             return true;
         }catch(Exception e){
@@ -137,11 +137,11 @@ public class EditoraDAO {
         }
     }
     
-    public boolean exist(int pcodigoEditora) throws SQLException{
+    public boolean exist(int pintcodigoEditora) throws SQLException{
         try{
             String sql = "select nomeeditora from editora where codigoeditora=?";
             stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, pcodigoEditora);
+            stmt.setInt(1, pintcodigoEditora);
             ResultSet rs = stmt.executeQuery();
             if(!rs.next())
                 return false;

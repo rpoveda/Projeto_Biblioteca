@@ -13,14 +13,14 @@ public class UsuarioController {
     
     public static String msg = "O campo {CAMPO} é obrigatório.";
     
-    private static boolean valid(Usuario usuario, boolean validaCodigo){
+    private static boolean isValid(Usuario usuario, boolean bvalidaCodigo){
         if(usuario.getNomeUsuario().equals(""))
         {   msg.replace("{CAMPO}", "Nome");  return false; }
         else if(usuario.getCpfUsuario() == 0)
         {   msg.replace("{CAMPO}", "CPF"); return false; }
         else if(usuario.getTelefoneUsuario().equals(""))
         {   msg.replace("{CAMPO}", "Telefone");  return false; }
-        else if(validaCodigo && usuario.getCodigoUsuario() == 0)
+        else if(bvalidaCodigo && usuario.getCodigoUsuario() == 0)
         { msg.replace("{CAMPO}", "Código"); return false; }
         else
             return true;
@@ -28,7 +28,7 @@ public class UsuarioController {
     
     public static boolean insert(Usuario usuario){
         try{
-            if(!valid(usuario, false))
+            if(!isValid(usuario, false))
                 return false;
             
             int iCodigoEndereco = 0;
@@ -48,7 +48,7 @@ public class UsuarioController {
     public static boolean update(Usuario usuario){
         try{
             
-            if(!valid(usuario, true))
+            if(!isValid(usuario, true))
                 return false;
             
             if(new EnderecoDAO().update(usuario.getEndereco()) && new UsuarioDAO().update(usuario))

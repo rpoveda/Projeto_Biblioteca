@@ -137,7 +137,7 @@ public class ExemplarDAO {
             String sql = "select e.*, o.* from exemplar e " + 
                     " join obra o on o.codigoobra = e.codigoobra " +
                     " where e.codigoexemplar like ? and o.codigoobra like ? " +
-                    " and o.tituloobra like '? and e.situacaoexemplar like ?";
+                    " and o.tituloobra like ? and e.situacaoexemplar = ?";
             
             String strCodigoExemplar = pExemplar.getCodigoExemplar() == 0 ? "" : Integer.toString(pExemplar.getCodigoExemplar());
             String strCodigoObra = pExemplar.getObra().getCodigoObra() == 0 ? "" : Integer.toString(pExemplar.getObra().getCodigoObra());
@@ -145,7 +145,7 @@ public class ExemplarDAO {
             stmt.setString(1, "%" + strCodigoExemplar + "%");
             stmt.setString(2, "%" +  strCodigoObra + "%");
             stmt.setString(3, "%" +  pExemplar.getObra().getTituloObra() + "%");
-            stmt.setString(4, "%" +  pExemplar.getSituacaoExemplar() + "%");
+            stmt.setString(4, pExemplar.getSituacaoExemplar());
             ResultSet rs = stmt.executeQuery();
             
             while(rs.next()){
@@ -154,7 +154,7 @@ public class ExemplarDAO {
                 
                 exemplar.setCodigoExemplar(rs.getInt("codigoexemplar"));
                 exemplar.setDataAquisicaoExemplar(rs.getDate("dataaquisicaoexemplar"));
-                exemplar.setSituacaoExemplar(rs.getString("situacao"));
+                exemplar.setSituacaoExemplar(rs.getString("situacaoexemplar"));
                 
                 obra.setCodigoObra(rs.getInt("codigoobra"));
                 obra.setTituloObra(rs.getString("tituloobra"));

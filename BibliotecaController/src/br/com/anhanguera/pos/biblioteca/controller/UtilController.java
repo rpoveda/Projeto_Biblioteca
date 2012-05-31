@@ -17,11 +17,6 @@ import javax.swing.JTextField;
  */
 public class UtilController {
     
-    public Object recebeInfo(){
-        int oi = 0;
-        return oi;
-    }
-    
     public static int recebeNumerico(JTextField objTextField, String campo){
         int valor = 0;
         boolean b = true;
