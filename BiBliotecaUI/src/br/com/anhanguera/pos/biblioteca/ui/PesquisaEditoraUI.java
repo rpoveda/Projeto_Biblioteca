@@ -7,6 +7,7 @@ package br.com.anhanguera.pos.biblioteca.ui;
 import br.com.anhanguera.pos.biblioteca.controller.EditoraController;
 import br.com.anhanguera.pos.biblioteca.entidade.Editora;
 import java.util.List;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -21,6 +22,7 @@ public class PesquisaEditoraUI extends javax.swing.JFrame {
     public PesquisaEditoraUI() {
         initComponents();
         initTable(new EditoraController().selectAll());
+        tblEditora.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
     
     private void initTable(List<Editora> _lstEditora){
@@ -53,7 +55,7 @@ public class PesquisaEditoraUI extends javax.swing.JFrame {
         txtCidadeEditora = new javax.swing.JTextField();
         btnFiltro = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Pesquisa Editora");
 
         tblEditora.setModel(new javax.swing.table.DefaultTableModel(

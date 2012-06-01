@@ -23,7 +23,7 @@ public class EnderecoDAO {
         try{
             int iRet = 0;
             String sql = "insert into endereco (ruaendereco, numendereco, bairroendereco, "+
-                    " cidadeendereco, estadoendereco, complementoendereco, cependereco) values ( " +
+                    " cidadeendereco, estadoendereco, complmentoendereco, cependereco) values ( " +
                     "?,?,?,?,?,?,?)";
             stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
             stmt.setString(1,endereco.getRua());
@@ -52,9 +52,9 @@ public class EnderecoDAO {
     
     public boolean update(Endereco endereco) throws SQLException{
         try{
-            String sql = "update endereco set ruaendereco=?, numendereco=? "
-                    + "bairroendereco=?, cidadeendereco=?, estadoendereco=? "
-                    + "complementoendereco=? where codigoendereco=?";
+            String sql = "update endereco set ruaendereco=?, numendereco=?, "
+                    + "bairroendereco=?, cidadeendereco=?, estadoendereco=?, "
+                    + "complmentoendereco=? where codigoendereco=?";
             stmt = conn.prepareStatement(sql);
             stmt.setString(1, endereco.getRua());
             stmt.setInt(2, endereco.getNumEndereco());
@@ -106,6 +106,35 @@ public class EnderecoDAO {
         {
             System.out.println(e.getMessage());
             return false;
+        }finally{
+            stmt.close();
+            conn.close();
+        }
+    }
+    
+    public Endereco select(int pintCodigoEndereco) throws SQLException{
+        try{
+            Endereco endereco = new Endereco();
+            String sql = "select * from endereco where codigoendereco =?";
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, pintCodigoEndereco);
+            ResultSet rs = stmt.executeQuery();
+            
+            if(rs.next()){
+                endereco.setCodigoEndereco(pintCodigoEndereco);
+                endereco.setRua(rs.getString("ruaEndereco"));
+                endereco.setNumEndereco(rs.getInt("numEndereco"));
+                endereco.setBairro(rs.getString("bairroEndereco"));
+                endereco.setCidade(rs.getString("cidadeEndereco"));
+                endereco.setEstado(rs.getString("estadoEndereco"));
+                endereco.setComplemento(rs.getString("complmentoEndereco"));
+                endereco.setCepEndereco(rs.getString("cepEndereco"));
+            }
+            
+            return endereco;
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+            return null;
         }finally{
             stmt.close();
             conn.close();

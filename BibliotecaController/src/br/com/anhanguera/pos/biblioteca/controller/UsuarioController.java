@@ -15,18 +15,18 @@ public class UsuarioController {
     
     private static boolean isValid(Usuario usuario, boolean bvalidaCodigo){
         if(usuario.getNomeUsuario().equals(""))
-        {   msg.replace("{CAMPO}", "Nome");  return false; }
+        {   msg = msg.replace("{CAMPO}", "Nome");  return false; }
         else if(usuario.getCpfUsuario() == 0)
-        {   msg.replace("{CAMPO}", "CPF"); return false; }
+        {   msg = msg.replace("{CAMPO}", "CPF"); return false; }
         else if(usuario.getTelefoneUsuario().equals(""))
-        {   msg.replace("{CAMPO}", "Telefone");  return false; }
-        else if(bvalidaCodigo && usuario.getCodigoUsuario() == 0)
-        { msg.replace("{CAMPO}", "Código"); return false; }
+        {   msg = msg.replace("{CAMPO}", "Telefone");  return false; }
+        //else if((bvalidaCodigo) && usuario.getCodigoUsuario() == 0)
+        //{ msg = msg.replace("{CAMPO}", "Código"); return false; }
         else
             return true;
     }
     
-    public static boolean insert(Usuario usuario){
+    public boolean insert(Usuario usuario){
         try{
             if(!isValid(usuario, false))
                 return false;
@@ -45,7 +45,7 @@ public class UsuarioController {
         }
     }
     
-    public static boolean update(Usuario usuario){
+    public boolean update(Usuario usuario){
         try{
             
             if(!isValid(usuario, true))
@@ -65,7 +65,7 @@ public class UsuarioController {
         }
     }
     
-    public static boolean delete(int pintCodigoUsuario, int pintCodigoEndereco){
+    public boolean delete(int pintCodigoUsuario, int pintCodigoEndereco){
         try{
             if(new EnderecoDAO().delete(pintCodigoEndereco) && new UsuarioDAO().delete(pintCodigoUsuario))
                 return true;
@@ -78,7 +78,7 @@ public class UsuarioController {
         }
     }
     
-    public static List<Usuario> selectAll(){
+    public List<Usuario> selectAll(){
         try{
             return new UsuarioDAO().selectAll();
         }catch(Exception e){
@@ -87,7 +87,7 @@ public class UsuarioController {
         }
     }
     
-    public static List<Usuario> select(Usuario usuario){
+    public List<Usuario> select(Usuario usuario){
         try{
             return new UsuarioDAO().select(usuario);
         }catch(Exception e)
@@ -97,7 +97,7 @@ public class UsuarioController {
         }
     }
     
-    public static boolean exist(int pintCodigoUsuario){
+    public boolean exist(int pintCodigoUsuario){
         try{
             return new UsuarioDAO().exist(pintCodigoUsuario);
         }catch(Exception e){
@@ -106,4 +106,12 @@ public class UsuarioController {
         }
     }
     
+    public Usuario obter(int pintCodigoUsuario){
+        try{
+            return new UsuarioDAO().obter(pintCodigoUsuario);
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+            return null;
+        }
+    } 
 }

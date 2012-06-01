@@ -24,7 +24,7 @@ public class UsuarioDAO {
     
     public boolean insert(Usuario usuario) throws SQLException{
         try{
-            String sql = "insert into usuario (nomeusuario, codigoendereco, telefoneususario, cpfusuario) "
+            String sql = "insert into usuario (nomeusuario, codigoendereco, telefoneusuario, cpfusuario) "
                     + "values (?,?,?,?)";
             stmt = conn.prepareStatement(sql);
             stmt.setString(1, usuario.getNomeUsuario());
@@ -51,6 +51,7 @@ public class UsuarioDAO {
             stmt.setInt(2, usuario.getEndereco().getCodigoEndereco());
             stmt.setString(3, usuario.getTelefoneUsuario());
             stmt.setInt(4, usuario.getCpfUsuario());
+            stmt.setInt(5, usuario.getCodigoUsuario());
             stmt.execute();
             return true;
         }catch(Exception e){
@@ -81,32 +82,48 @@ public class UsuarioDAO {
     public List<Usuario> selectAll() throws SQLException{
         try{
             List<Usuario> _lstUsuario = new ArrayList<Usuario>();
-            String sql = "select u.*, e.* from usuario u "+
-                    " join endereco e on e.codigoendereco = u.codigoendereco ";
+            String sql = "select * from usuario";
             stmt = conn.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
             
             while(rs.next()){
                 Usuario usuario = new Usuario();
-                Endereco endereco = new Endereco();
+                //Endereco endereco = new Endereco();
                 usuario.setCodigoUsuario(rs.getInt("codigousuario"));
                 usuario.setNomeUsuario(rs.getString("nomeusuario"));
                 usuario.setTelefoneUsuario("telefoneusuario");
                 usuario.setCpfUsuario(rs.getInt("cpfusuario"));
-                endereco.setCodigoEndereco(rs.getInt("codigoendereco"));
-                endereco.setRua(rs.getString("ruaendereco"));
-                endereco.setNumEndereco(rs.getInt("numendereco"));
-                endereco.setBairro(rs.getString("bairroendereco"));
-                endereco.setCidade(rs.getString("cidadeendereco"));
-                endereco.setEstado(rs.getString("estadoendereco"));
-                endereco.setComplemento(rs.getString("complementoendereco"));
-                endereco.setCepEndereco(rs.getString("cependereco"));
-                usuario.setEndereco(endereco);
-                
+                usuario.setEndereco(new EnderecoDAO().select(rs.getInt("codigoendereco")));
                 _lstUsuario.add(usuario);
             }
             
             return _lstUsuario;
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+            return null;
+        }finally{
+            stmt.close();
+            conn.close();
+        }
+    }
+    
+    public Usuario obter(int pintCodigoUsuario) throws SQLException{
+        try{
+            Usuario usuario = new Usuario();
+            String sql = "select * from usuario where codigousuario =?";
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, pintCodigoUsuario);
+            ResultSet rs = stmt.executeQuery();
+            
+            if(rs.next()){
+                usuario.setCodigoUsuario(rs.getInt("codigousuario"));
+                usuario.setNomeUsuario(rs.getString("nomeusuario"));
+                usuario.setTelefoneUsuario("telefoneusuario");
+                usuario.setCpfUsuario(rs.getInt("cpfusuario"));
+                usuario.setEndereco(new EnderecoDAO().select(rs.getInt("codigoendereco")));
+            }
+            
+            return usuario;
         }catch(Exception e){
             System.out.println(e.getMessage());
             return null;
@@ -143,15 +160,15 @@ public class UsuarioDAO {
                 usuario.setNomeUsuario(rs.getString("nomeusuario"));
                 usuario.setTelefoneUsuario("telefoneusuario");
                 usuario.setCpfUsuario(rs.getInt("cpfusuario"));
-                endereco.setCodigoEndereco(rs.getInt("codigoendereco"));
+                /*endereco.setCodigoEndereco(rs.getInt("codigoendereco"));
                 endereco.setRua(rs.getString("ruaendereco"));
                 endereco.setNumEndereco(rs.getInt("numendereco"));
                 endereco.setBairro(rs.getString("bairroendereco"));
                 endereco.setCidade(rs.getString("cidadeendereco"));
                 endereco.setEstado(rs.getString("estadoendereco"));
                 endereco.setComplemento(rs.getString("complementoendereco"));
-                endereco.setCepEndereco(rs.getString("cependereco"));
-                usuario.setEndereco(endereco);
+                endereco.setCepEndereco(rs.getString("cependereco"));*/
+                usuario.setEndereco(new EnderecoDAO().select(rs.getInt("codigoendereco")));
                 
                 _lstUsuario.add(usuario);
             }

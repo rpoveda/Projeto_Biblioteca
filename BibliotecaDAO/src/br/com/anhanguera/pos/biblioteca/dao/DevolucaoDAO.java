@@ -140,18 +140,18 @@ public class DevolucaoDAO {
                     + " join exemplar e on e.codigoexemplar = d.codigoexemplar "
                     + " join obra o on o.codigoobra = e.codigoobra "
                     + " join usuario u on u.codigousuario = d.codigousuario "
-                    + " where d.codigodevolucao like '%%' and d.datadevolucao like '%%' "
-                    + " and e.codigoobra like '%%' and o.tituloobra like '%%' and"
-                    + " u.nomeusuario like '%%' ";
+                    + " where d.codigodevolucao like ? "
+                    + " and e.codigoobra like ? and o.tituloobra like ? and"
+                    + " u.nomeusuario like ? ";
             String strCodigoDevolucao = (pobjdevolucao.getCodigoDevolucao() == 0) ? "" : Integer.toString(pobjdevolucao.getCodigoDevolucao());
-            String strCodigoObra = (pobjdevolucao.getExemplar().getObra().getCodigoObra() == 0) ? "" : Integer.toString(pobjdevolucao.getExemplar().getObra().getCodigoObra());
+            String strCodigoObra = (pobjdevolucao.getExemplar().getCodigoExemplar() == 0) ? "" : Integer.toString(pobjdevolucao.getExemplar().getCodigoExemplar());
             
             stmt = conn.prepareStatement(sql);
             stmt.setString(1, "%" + strCodigoDevolucao + "%");
-            stmt.setString(2, "%" + pobjdevolucao.getDataDevolucao().toString() + "%");
-            stmt.setString(3, strCodigoObra);
-            stmt.setString(4, pobjdevolucao.getExemplar().getObra().getTituloObra());
-            stmt.setString(5, pobjdevolucao.getUsuarioDevoluca().getNomeUsuario());
+            //stmt.setString(2, "%" + pobjdevolucao.getDataDevolucao().toString() + "%");
+            stmt.setString(2, "%" + strCodigoObra + "%");
+            stmt.setString(3, "%" + pobjdevolucao.getExemplar().getObra().getTituloObra() + "%");
+            stmt.setString(4, "%" + pobjdevolucao.getUsuarioDevoluca().getNomeUsuario() + "%");
             ResultSet rs = stmt.executeQuery();
             
             while(rs.next()){
