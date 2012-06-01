@@ -4,6 +4,13 @@
  */
 package br.com.anhanguera.pos.biblioteca.ui;
 
+import br.com.anhanguera.pos.biblioteca.controller.ExemplarController;
+import br.com.anhanguera.pos.biblioteca.entidade.Exemplar;
+import br.com.anhanguera.pos.biblioteca.entidade.Obra;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author rafaelpoveda
@@ -15,6 +22,17 @@ public class DevolucaoUI extends javax.swing.JFrame {
      */
     public DevolucaoUI() {
         initComponents();
+        initTable(new ExemplarController().selectAll());
+    }
+    
+    private void initTable(List<Exemplar> plstExemplar){
+        
+        DefaultTableModel model = (DefaultTableModel) tblExemplar.getModel();
+        model.setRowCount(0);
+        for(Exemplar exemplar : plstExemplar){
+            model.addRow(new Object[]{exemplar.getCodigoExemplar(), exemplar.getObra().getTituloObra(), exemplar.getDataAquisicaoExemplar()});
+        }
+        
     }
 
     /**
@@ -28,7 +46,7 @@ public class DevolucaoUI extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblExemplar = new javax.swing.JTable();
         txtCodigoExemplar = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         txtTitulo = new javax.swing.JTextField();
@@ -49,7 +67,7 @@ public class DevolucaoUI extends javax.swing.JFrame {
 
         jLabel1.setText("Codigo Exemplar");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblExemplar.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -57,11 +75,16 @@ public class DevolucaoUI extends javax.swing.JFrame {
                 "Código", "Titulo", "Data emprestimo"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tblExemplar);
 
         jLabel2.setText("Nome Exemplar");
 
         btnBuscar.setText("Buscar");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText("Data devolução");
 
@@ -105,42 +128,38 @@ public class DevolucaoUI extends javax.swing.JFrame {
                             .add(txtCodigoExemplar, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 157, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(txtTitulo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 343, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(layout.createSequentialGroup()
+                                .add(txtTitulo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 343, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(btnBuscar))
                             .add(jLabel2))
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .add(btnBuscar)
-                        .add(34, 34, 34))
+                        .add(6, 6, Short.MAX_VALUE))
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                             .add(jScrollPane1)
-                            .add(jSeparator1))
-                        .addContainerGap())
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
-                        .add(0, 0, Short.MAX_VALUE)
-                        .add(btnSalvar)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(btnRemove)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(btnCancel)
+                            .add(jSeparator1)
+                            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
+                                .add(0, 0, Short.MAX_VALUE)
+                                .add(btnSalvar)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(btnRemove)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(btnCancel)))
                         .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
                 .addContainerGap()
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(layout.createSequentialGroup()
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                            .add(jLabel1)
-                            .add(jLabel2))
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                            .add(txtCodigoExemplar, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                            .add(txtTitulo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                        .add(3, 3, 3))
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
-                        .add(btnBuscar)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)))
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel1)
+                    .add(jLabel2))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(txtCodigoExemplar, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(txtTitulo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(btnBuscar))
+                .add(1, 1, 1)
                 .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 95, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(jSeparator1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 10, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
@@ -164,6 +183,26 @@ public class DevolucaoUI extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        boolean bFiltrar = true;
+        Exemplar e = new Exemplar();
+        Obra o = new Obra();
+        try{
+            if(!txtCodigoExemplar.getText().equals(""))
+                e.setCodigoExemplar(Integer.parseInt(txtCodigoExemplar.getText()));
+        }
+        catch(Exception ex){
+            bFiltrar = false; 
+            JOptionPane.showMessageDialog(null, "Digite apenas numeros no campo Codigo Exemplar.");
+        }
+        o.setTituloObra(txtTitulo.getText());
+        e.setObra(o);
+
+        if(bFiltrar){
+            initTable(new ExemplarController().select(e));
+        }
+    }//GEN-LAST:event_btnBuscarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -219,7 +258,7 @@ public class DevolucaoUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tblExemplar;
     private javax.swing.JTextField txtCodigoDevolucao;
     private javax.swing.JTextField txtCodigoExemplar;
     private javax.swing.JTextField txtDtDevolucao;

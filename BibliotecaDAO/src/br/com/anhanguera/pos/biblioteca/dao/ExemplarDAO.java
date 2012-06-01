@@ -112,7 +112,7 @@ public class ExemplarDAO {
                 
                 exemplar.setCodigoExemplar(rs.getInt("codigoexemplar"));
                 exemplar.setDataAquisicaoExemplar(rs.getDate("dataaquisicaoexemplar"));
-                exemplar.setSituacaoExemplar(rs.getString("situacao"));
+                exemplar.setSituacaoExemplar(rs.getString("situacaoexemplar"));
                 
                 obra.setCodigoObra(rs.getInt("codigoobra"));
                 obra.setTituloObra(rs.getString("tituloobra"));
