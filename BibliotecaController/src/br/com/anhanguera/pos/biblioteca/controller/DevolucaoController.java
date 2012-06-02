@@ -15,13 +15,11 @@ public class DevolucaoController {
     public static boolean isValid(Devolucao devolucao, boolean bValidaCodigo){
         
         if(bValidaCodigo && devolucao.getCodigoDevolucao() == 0)
-        { msg.replace("{CAMPO}", "Código devolução");   return false; }
-        else if(devolucao.getDataDevolucao().equals(""))
-        { msg.replace("{CAMPO}", "Data");   return false; }
+        { msg = msg.replace("{CAMPO}", "Código devolução");   return false; }
         else if(devolucao.getExemplar().getCodigoExemplar() == 0)
-        { msg.replace("{CAMPO}", "Código exemplar");   return false; }
+        { msg = msg.replace("{CAMPO}", "Código exemplar");   return false; }
         else if(devolucao.getUsuarioDevoluca().getCodigoUsuario() == 0)
-        { msg.replace("{CAMPO}", "Código usuário");   return false; }
+        { msg = msg.replace("{CAMPO}", "Código usuário");   return false; }
         else
             return true;
     }
@@ -65,7 +63,7 @@ public class DevolucaoController {
         }
     }
     
-    public static List<Devolucao> select(){
+    public static List<Devolucao> selectAll(){
         try{
             return new DevolucaoDAO().selectAll();
         }catch(Exception e){
@@ -74,7 +72,7 @@ public class DevolucaoController {
         }
     }
     
-    public static List<Devolucao> selectAll(Devolucao devolucao){
+    public static List<Devolucao> select(Devolucao devolucao){
         try{
             return new DevolucaoDAO().select(devolucao);
         }catch(Exception e){

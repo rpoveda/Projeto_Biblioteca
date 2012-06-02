@@ -9,7 +9,7 @@ import java.util.Date;
 public class Exemplar {
 
     private int codigoExemplar = 0;
-    private Obra obra;
+    private Obra obra = new Obra();
     private Date dataAquisicaoExemplar;
     private String situacaoExemplar = "";
 

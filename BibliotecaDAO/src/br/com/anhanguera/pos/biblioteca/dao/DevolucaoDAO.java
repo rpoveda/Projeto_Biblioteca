@@ -47,7 +47,7 @@ public class DevolucaoDAO {
     public boolean update(Devolucao devolucao) throws SQLException{
         try{
             String sql = "update devolucao set codigoexemplar=?, datadevolucao=?"
-                    + " ,codigofuncionario=? where codigodevolicao=? ";
+                    + " ,codigousuario=? where codigodevolucao=? ";
             stmt = conn.prepareStatement(sql);
             stmt.setInt(1, devolucao.getExemplar().getCodigoExemplar());
             stmt.setDate(2, UtilDAO.convertDataForDateSql(devolucao.getDataDevolucao()));
@@ -66,7 +66,7 @@ public class DevolucaoDAO {
     
     public boolean delete(int pintCodigoDevolucao) throws SQLException{
         try{
-            String sql = "delte from devolucao where codigodevolucao=?";
+            String sql = "delete from devolucao where codigodevolucao=?";
             stmt = conn.prepareStatement(sql);
             stmt.setInt(1, pintCodigoDevolucao);
             stmt.execute();

@@ -4,10 +4,16 @@
  */
 package br.com.anhanguera.pos.biblioteca.ui;
 
+import br.com.anhanguera.pos.biblioteca.controller.DevolucaoController;
 import br.com.anhanguera.pos.biblioteca.controller.ExemplarController;
+import br.com.anhanguera.pos.biblioteca.controller.UsuarioController;
+import br.com.anhanguera.pos.biblioteca.controller.UtilController;
+import br.com.anhanguera.pos.biblioteca.entidade.Devolucao;
 import br.com.anhanguera.pos.biblioteca.entidade.Exemplar;
 import br.com.anhanguera.pos.biblioteca.entidade.Obra;
+import br.com.anhanguera.pos.biblioteca.entidade.Usuario;
 import java.util.List;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -20,18 +26,57 @@ public class DevolucaoUI extends javax.swing.JFrame {
     /**
      * Creates new form DevolucaoUI
      */
+    private int intCodigoUsuario = 0;
+    private boolean bEditar = false;
     public DevolucaoUI() {
-        initComponents();
+        componentsUI();
         initTable(new ExemplarController().selectAll());
+        
+    }
+    
+    public DevolucaoUI(Devolucao devolucao){
+        initComponents();
+        Exemplar e = new Exemplar();
+        e.setCodigoExemplar(devolucao.getExemplar().getCodigoExemplar());
+        initTable(new ExemplarController().select(e));
+        txtCodigoDevolucao.setText(Integer.toString(devolucao.getCodigoDevolucao()));
+        txtDtDevolucao.setText(devolucao.getDataDevolucao().toString());
+        intCodigoUsuario = devolucao.getUsuarioDevoluca().getCodigoUsuario();
+        bEditar = true;
+        initUsuario();
+        
+    }
+    
+    private void componentsUI(){
+        initComponents();
+        initUsuario();
+        txtCodigoDevolucao.setText(Integer.toString(new UtilController().nextId("devolucao", "codigodevolucao")));
     }
     
     private void initTable(List<Exemplar> plstExemplar){
         
         DefaultTableModel model = (DefaultTableModel) tblExemplar.getModel();
+        
         model.setRowCount(0);
         for(Exemplar exemplar : plstExemplar){
             model.addRow(new Object[]{exemplar.getCodigoExemplar(), exemplar.getObra().getTituloObra(), exemplar.getDataAquisicaoExemplar()});
         }
+        
+    }
+    
+    private void initUsuario(){
+        DefaultComboBoxModel model = (DefaultComboBoxModel) cbxUsuario.getModel();
+        model.addElement("");
+        int count = 0;
+        int index = 0;
+        for(Usuario usuario : new UsuarioController().selectAll()){
+            model.addElement(usuario.getCodigoUsuario() + "-" + usuario.getNomeUsuario());
+            if(usuario.getCodigoUsuario() == intCodigoUsuario)
+                index = count;
+            
+            count++;
+        }
+        cbxUsuario.setSelectedIndex(index);
         
     }
 
@@ -57,7 +102,6 @@ public class DevolucaoUI extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         txtCodigoDevolucao = new javax.swing.JTextField();
         btnSalvar = new javax.swing.JButton();
-        btnRemove = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         cbxUsuario = new javax.swing.JComboBox();
@@ -75,6 +119,11 @@ public class DevolucaoUI extends javax.swing.JFrame {
                 "Código", "Titulo", "Data emprestimo"
             }
         ));
+        tblExemplar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblExemplarMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblExemplar);
 
         jLabel2.setText("Nome Exemplar");
@@ -93,10 +142,15 @@ public class DevolucaoUI extends javax.swing.JFrame {
         txtCodigoDevolucao.setEnabled(false);
 
         btnSalvar.setText("Salvar");
-
-        btnRemove.setText("Remover");
+        btnSalvar.setEnabled(false);
+        btnSalvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalvarActionPerformed(evt);
+            }
+        });
 
         btnCancel.setText("Cancelar");
+        btnCancel.setEnabled(false);
 
         jLabel5.setText("Usuário");
 
@@ -142,8 +196,6 @@ public class DevolucaoUI extends javax.swing.JFrame {
                                 .add(0, 0, Short.MAX_VALUE)
                                 .add(btnSalvar)
                                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                .add(btnRemove)
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                                 .add(btnCancel)))
                         .addContainerGap())))
         );
@@ -176,7 +228,6 @@ public class DevolucaoUI extends javax.swing.JFrame {
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 31, Short.MAX_VALUE)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(btnSalvar)
-                    .add(btnRemove)
                     .add(btnCancel))
                 .add(16, 16, 16))
         );
@@ -203,6 +254,55 @@ public class DevolucaoUI extends javax.swing.JFrame {
             initTable(new ExemplarController().select(e));
         }
     }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
+        Devolucao devolucao = new Devolucao();
+        Exemplar exemplar = new Exemplar();
+        Usuario usuario = new Usuario();
+        boolean bValidadata = true;
+        int intCodigoExemplar = (Integer) tblExemplar.getModel().getValueAt(tblExemplar.getSelectedRow(), 0);
+        int intCodigoUsuario = 0;
+        if(cbxUsuario.getSelectedIndex() != 0)
+            intCodigoUsuario = Integer.parseInt(cbxUsuario.getSelectedItem().toString().split("-")[0]);
+        
+        exemplar.setCodigoExemplar(intCodigoExemplar);
+        usuario.setCodigoUsuario(intCodigoUsuario);
+        devolucao.setExemplar(exemplar);
+        devolucao.setUsuarioDevoluca(usuario);
+        
+        if(txtDtDevolucao.getText().equals(""))
+            bValidadata = false;
+        
+        if(bValidadata)
+        {
+            devolucao.setDataDevolucao(new UtilController().convertDate(txtDtDevolucao.getText()));
+        
+            if(!bEditar)
+            {
+                if(new DevolucaoController().insert(devolucao))
+                    JOptionPane.showMessageDialog(null, "Devolução salva com sucesso.");
+                else
+                JOptionPane.showMessageDialog(null, DevolucaoController.msg);
+            }
+            else
+            {
+                devolucao.setCodigoDevolucao(Integer.parseInt(txtCodigoDevolucao.getText()));
+                if(new DevolucaoController().update(devolucao))
+                    JOptionPane.showMessageDialog(null, "Devolucao salvar com sucesso.");
+                else
+                    JOptionPane.showMessageDialog(null, DevolucaoController.msg);
+            }
+            
+        }else
+        {
+            JOptionPane.showMessageDialog(null, "Campo Data de devolução é obrigatorio.");
+        }
+    }//GEN-LAST:event_btnSalvarActionPerformed
+
+    private void tblExemplarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblExemplarMouseClicked
+        btnCancel.setEnabled(true);
+        btnSalvar.setEnabled(true);
+    }//GEN-LAST:event_tblExemplarMouseClicked
 
     /**
      * @param args the command line arguments
@@ -248,7 +348,6 @@ public class DevolucaoUI extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnCancel;
-    private javax.swing.JButton btnRemove;
     private javax.swing.JButton btnSalvar;
     private javax.swing.JComboBox cbxUsuario;
     private javax.swing.JLabel jLabel1;

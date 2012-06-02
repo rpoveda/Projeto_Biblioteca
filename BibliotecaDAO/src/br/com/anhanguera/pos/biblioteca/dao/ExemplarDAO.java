@@ -137,15 +137,21 @@ public class ExemplarDAO {
             String sql = "select e.*, o.* from exemplar e " + 
                     " join obra o on o.codigoobra = e.codigoobra " +
                     " where e.codigoexemplar like ? and o.codigoobra like ? " +
-                    " and o.tituloobra like ? and e.situacaoexemplar = ?";
-            
+                    " and o.tituloobra like ? ";
+            boolean bContemSituacal = false;
+            if(!pExemplar.getSituacaoExemplar().equals("")){
+                bContemSituacal = true;
+                sql += " and e.situacaoexemplar = ?";
+            }
+
             String strCodigoExemplar = pExemplar.getCodigoExemplar() == 0 ? "" : Integer.toString(pExemplar.getCodigoExemplar());
             String strCodigoObra = pExemplar.getObra().getCodigoObra() == 0 ? "" : Integer.toString(pExemplar.getObra().getCodigoObra());
             stmt = conn.prepareStatement(sql);
             stmt.setString(1, "%" + strCodigoExemplar + "%");
             stmt.setString(2, "%" +  strCodigoObra + "%");
             stmt.setString(3, "%" +  pExemplar.getObra().getTituloObra() + "%");
-            stmt.setString(4, pExemplar.getSituacaoExemplar());
+            if(bContemSituacal)
+                stmt.setString(4, pExemplar.getSituacaoExemplar());
             ResultSet rs = stmt.executeQuery();
             
             while(rs.next()){

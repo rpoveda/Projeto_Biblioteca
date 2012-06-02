@@ -9,9 +9,9 @@ import java.util.Date;
 public class Devolucao {
     
     private int codigoDevolucao = 0;
-    private Exemplar exemplar;
+    private Exemplar exemplar = new Exemplar();
     private Date dataDevolucao;
-    private Usuario usuarioDevoluca;
+    private Usuario usuarioDevoluca = new Usuario();
 
     public int getCodigoDevolucao() {
         return codigoDevolucao;

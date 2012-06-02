@@ -4,6 +4,14 @@
  */
 package br.com.anhanguera.pos.biblioteca.ui;
 
+import br.com.anhanguera.pos.biblioteca.controller.DevolucaoController;
+import br.com.anhanguera.pos.biblioteca.entidade.Devolucao;
+import br.com.anhanguera.pos.biblioteca.entidade.Exemplar;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author rafaelpoveda
@@ -15,6 +23,16 @@ public class PesquisaDevolucaoUI extends javax.swing.JFrame {
      */
     public PesquisaDevolucaoUI() {
         initComponents();
+        initTable(new DevolucaoController().selectAll());
+        tblDevolucao.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+    }
+    
+    private void initTable(List<Devolucao> plstDevolucao){
+        DefaultTableModel model = (DefaultTableModel) tblDevolucao.getModel();
+        model.setNumRows(0);
+        for(Devolucao devolucao : plstDevolucao){
+            model.addRow(new Object[] { devolucao.getCodigoDevolucao(), devolucao.getExemplar().getCodigoExemplar() ,devolucao.getExemplar().getObra().getTituloObra(), devolucao.getDataDevolucao(), devolucao.getUsuarioDevoluca().getNomeUsuario() });
+        }
     }
 
     /**
@@ -34,7 +52,9 @@ public class PesquisaDevolucaoUI extends javax.swing.JFrame {
         txtUsuario = new javax.swing.JTextField();
         btnFiltrar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblDevolucao = new javax.swing.JTable();
+        btnEditar = new javax.swing.JButton();
+        btnRemover = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Pesquisa Devolução");
@@ -47,15 +67,36 @@ public class PesquisaDevolucaoUI extends javax.swing.JFrame {
 
         btnFiltrar.setText("Filtrar");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblDevolucao.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Codigo", "Titulo", "Data devolução", "Usuário"
+                "Codigo", "Codigo Exemplar", "Titulo", "Data devolução", "Usuário"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        tblDevolucao.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblDevolucaoMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tblDevolucao);
+
+        btnEditar.setText("Editar");
+        btnEditar.setEnabled(false);
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
+
+        btnRemover.setText("Remover");
+        btnRemover.setEnabled(false);
+        btnRemover.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoverActionPerformed(evt);
+            }
+        });
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -79,10 +120,15 @@ public class PesquisaDevolucaoUI extends javax.swing.JFrame {
                             .add(jLabel3)
                             .add(txtUsuario, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 184, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                         .add(0, 29, Short.MAX_VALUE))
+                    .add(jScrollPane1)
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                         .add(0, 0, Short.MAX_VALUE)
-                        .add(btnFiltrar))
-                    .add(jScrollPane1))
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(org.jdesktop.layout.GroupLayout.TRAILING, btnFiltrar)
+                            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
+                                .add(btnRemover)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(btnEditar)))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -101,12 +147,50 @@ public class PesquisaDevolucaoUI extends javax.swing.JFrame {
                 .add(18, 18, 18)
                 .add(btnFiltrar)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 275, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 237, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 15, Short.MAX_VALUE)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(btnEditar)
+                    .add(btnRemover)))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void tblDevolucaoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDevolucaoMouseClicked
+        btnRemover.setEnabled(true);
+        btnEditar.setEnabled(true);
+    }//GEN-LAST:event_tblDevolucaoMouseClicked
+
+    private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
+        if(JOptionPane.showConfirmDialog(this, "Deseja excluir a devolucao selecionada?") == JOptionPane.YES_OPTION){
+            int intCodigoDevolucao = (Integer)tblDevolucao.getModel().getValueAt(tblDevolucao.getSelectedRow(), 0);
+            //int intCodigoExemplar = (Integer)tblDevolucao.getModel().getValueAt(tblDevolucao.getSelectedRow(), 1);
+            
+            if(new DevolucaoController().delete(intCodigoDevolucao)){
+                JOptionPane.showMessageDialog(null, "Devolução deletada com sucesso.");
+                initTable(new DevolucaoController().selectAll());
+            }
+            else
+                JOptionPane.showMessageDialog(null, "Não foi possivel deletar a devolução.");
+        }
+    }//GEN-LAST:event_btnRemoverActionPerformed
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        int intCodigoDevolucao = (Integer)tblDevolucao.getModel().getValueAt(tblDevolucao.getSelectedRow(), 0);
+        int intCodigoExemplar = (Integer)tblDevolucao.getModel().getValueAt(tblDevolucao.getSelectedRow(),1);
+        
+        Exemplar e = new Exemplar();
+        e.setCodigoExemplar(intCodigoExemplar);
+        Devolucao d = new Devolucao();
+        d.setCodigoDevolucao(intCodigoDevolucao);
+        d.setExemplar(e);
+        
+        List<Devolucao> lst = new DevolucaoController().select(d);
+        
+        DevolucaoUI objDevolucaoUI = new DevolucaoUI(lst.get(0));
+        objDevolucaoUI.setVisible(true);
+    }//GEN-LAST:event_btnEditarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -150,13 +234,15 @@ public class PesquisaDevolucaoUI extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnFiltrar;
+    private javax.swing.JButton btnRemover;
     private javax.swing.JComboBox cbxExemplar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tblDevolucao;
     private javax.swing.JTextField txtCodigo;
     private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables
