@@ -4,17 +4,17 @@
  */
 package br.com.anhanguera.pos.biblioteca.ui;
 
-import br.com.anhanguera.pos.biblioteca.controller.AutorController;
-import br.com.anhanguera.pos.biblioteca.controller.EditoraController;
-import br.com.anhanguera.pos.biblioteca.controller.ObraController;
-import br.com.anhanguera.pos.biblioteca.controller.UtilController;
+import br.com.anhanguera.pos.biblioteca.controller.*;
 import br.com.anhanguera.pos.biblioteca.dao.UtilDAO;
+import br.com.anhanguera.pos.biblioteca.entidade.Assunto;
 import br.com.anhanguera.pos.biblioteca.entidade.Autor;
 import br.com.anhanguera.pos.biblioteca.entidade.Editora;
 import br.com.anhanguera.pos.biblioteca.entidade.Obra;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -34,6 +34,7 @@ public class ObraUI extends javax.swing.JFrame {
         initAutor();
         initEditora();
         initCodigo();
+        initTable();
     }
     
     public ObraUI(Obra obra){
@@ -43,12 +44,20 @@ public class ObraUI extends javax.swing.JFrame {
         
         initAutor();
         initEditora();
-        
+        initTable();
         txtCodigoObra.setText(Integer.toString(obra.getCodigoObra()));
         txtTituloObra.setText(obra.getTituloObra());
         txtAnoPublicacao.setText(Integer.toString(obra.getAnoPublicacao()));
         bEditar = true;
         
+    }
+    
+    private void initTable(){
+        DefaultTableModel model = (DefaultTableModel)tblAssunto.getModel();
+        model.setRowCount(0);
+        
+        for(Assunto assunto : new AssuntoController().selectAll())
+            model.addRow(new Object[] { assunto.getCodigoAssunto(), assunto.getDescricaoAssunto() });
     }
     
     private void initAutor(){
@@ -111,6 +120,8 @@ public class ObraUI extends javax.swing.JFrame {
         cbxSituacao = new javax.swing.JComboBox();
         btnGravar = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblAssunto = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Editora");
@@ -149,6 +160,16 @@ public class ObraUI extends javax.swing.JFrame {
 
         btnCancel.setText("Cancelar");
 
+        tblAssunto.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Codigo", "Descricao"
+            }
+        ));
+        jScrollPane1.setViewportView(tblAssunto);
+
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -156,6 +177,9 @@ public class ObraUI extends javax.swing.JFrame {
             .add(layout.createSequentialGroup()
                 .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(layout.createSequentialGroup()
+                        .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 465, Short.MAX_VALUE)
+                        .addContainerGap())
                     .add(layout.createSequentialGroup()
                         .add(6, 6, 6)
                         .add(txtAnoPublicacao, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 118, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
@@ -178,7 +202,7 @@ public class ObraUI extends javax.swing.JFrame {
                                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
                                     .add(cbxAutor, 0, 118, Short.MAX_VALUE)
                                     .add(txtCodigoObra))))
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 109, Short.MAX_VALUE)
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                             .add(jLabel6)
                             .add(cbxEditora, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
@@ -214,11 +238,13 @@ public class ObraUI extends javax.swing.JFrame {
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(txtAnoPublicacao, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(cbxSituacao, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .add(24, 24, 24)
+                .add(18, 18, 18)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 315, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 13, Short.MAX_VALUE)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(btnGravar)
                     .add(btnCancel))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -238,10 +264,18 @@ public class ObraUI extends javax.swing.JFrame {
         editora.setCodigoEditora(intCodigoeditora);
         obra.setEditoraObra(editora);
         
+        List<Assunto> lstAssunto = new ArrayList<Assunto>();
+        for(int i = 0; i < tblAssunto.getSelectedRowCount(); i++){
+            Assunto assunto = new Assunto();
+            assunto.setCodigoAssunto((Integer)tblAssunto.getModel().getValueAt(i, 0));
+            assunto.setDescricaoAssunto((String)tblAssunto.getModel().getValueAt(i, 1));
+            lstAssunto.add(assunto);
+        }
+        
         if(bEditar){
             obra.setCodigoObra(Integer.parseInt(txtCodigoObra.getText()));
             
-            if(new ObraController().alter(obra))
+            if(new ObraController().alter(obra) && new AssuntoController().insertAssuntoObra(lstAssunto, intCodigoeditora, bEditar))
                 JOptionPane.showMessageDialog(null, "Obra salva com sucesso.");
             else
                 JOptionPane.showMessageDialog(null, "Nao foi possivel salvar a obra.");
@@ -249,7 +283,10 @@ public class ObraUI extends javax.swing.JFrame {
         }
         else{
             if(new ObraController().insert(obra))
+            {
+                new AssuntoController().insertAssuntoObra(lstAssunto, new ObraController().ultimoRegistro(), bEditar);
                 JOptionPane.showMessageDialog(null, "Obra cadastrada com sucesso.");
+            }
             else
                 JOptionPane.showMessageDialog(null, "Não foi possível salvar a obra.");
         }
@@ -321,6 +358,8 @@ public class ObraUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable tblAssunto;
     private javax.swing.JTextField txtAnoPublicacao;
     private javax.swing.JTextField txtCodigoObra;
     private javax.swing.JTextField txtTituloObra;

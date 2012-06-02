@@ -51,4 +51,12 @@ public class AssuntoController {
         }
     }
     
+    public boolean insertAssuntoObra(List<Assunto> plstAssunto, int pintCodigoObra, boolean bRemoveTodos){
+        try{
+            return new AssuntoDAO().insertAssuntoObra(plstAssunto, pintCodigoObra, bRemoveTodos);
+        }catch(Exception e){
+            return false;
+        }
+    }
+    
 }

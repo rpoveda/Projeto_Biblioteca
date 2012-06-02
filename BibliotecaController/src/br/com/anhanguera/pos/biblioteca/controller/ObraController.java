@@ -82,4 +82,12 @@ public class ObraController {
         }
     }
     
+    public int ultimoRegistro(){
+        try{
+            return new ObraDAO().ultimoRegistro();
+        }catch(Exception e){
+            return 0;
+        }
+    }
+    
 }

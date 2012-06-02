@@ -190,4 +190,23 @@ public class ObraDAO {
         }
     }
     
+    public int ultimoRegistro() throws SQLException{
+        try{
+            int iRet = 0;
+            String sql = "select max(codigoobra) as 'codigoobra' from obra order by codigoobra desc";
+            stmt = conn.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+            
+            if(rs.next())
+                iRet = rs.getInt("codigoobra");
+            
+            return iRet;
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+            return 0;
+        }finally{
+            stmt.close();
+            conn.close();
+        }
+    }
 }

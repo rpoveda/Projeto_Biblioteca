@@ -7,6 +7,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -34,6 +36,61 @@ public class AssuntoDAO {
         }finally{
             stmt.close();
             conn.close();
+        }
+    }
+    
+    public boolean insertAssuntoObra(List<Assunto> plstAssunto, int pintCodigoObra, boolean bRemoveTodos) throws SQLException{
+        try{
+            
+            if(bRemoveTodos)
+                this.deletePorObra(pintCodigoObra);
+            
+            for(Assunto assunto : plstAssunto)
+                this.inserAssuntoObra(assunto, pintCodigoObra);
+            
+            return true;
+        }catch(Exception e){
+            return false;
+        }finally{
+            stmt.close();
+            conn.close();
+        }
+    }
+    
+    private void inserAssuntoObra(Assunto assunto, int pintCodigoObra){
+        String sql = "insert into obraassunto (codigoobra, codigoassunto) values (?,?)";
+        try {
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, pintCodigoObra);
+            stmt.setInt(2, assunto.getCodigoAssunto());
+            stmt.execute();
+            stmt.close();
+        } catch (SQLException ex) {
+            try {
+                System.out.println(ex.getMessage());
+                stmt.close();
+            } catch (SQLException ex1) {
+                System.out.println(ex1.getMessage());
+                Logger.getLogger(AssuntoDAO.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+            Logger.getLogger(AssuntoDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+    
+    private void deletePorObra(int pintCodigoObra){
+        String sql = "delete from obraassunto where codigoobra=?";
+        try {
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, pintCodigoObra);
+            stmt.execute();
+        } catch (SQLException ex) {
+            try {
+                stmt.close();
+            } catch (SQLException ex1) {
+                Logger.getLogger(AssuntoDAO.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+            Logger.getLogger(AssuntoDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -100,19 +157,19 @@ public class AssuntoDAO {
         try{
             List<Assunto> lstAssunto = new ArrayList<Assunto>();
             String sql = " select * from assunto"
-                    + " where cosigoassunto like ?"
+                    + " where codigoassunto like ?"
                     + " and descricaoassunto like ? ";
             String strCodigoAssunto = passunto.getCodigoAssunto() == 0 ? "" : Integer.toString(passunto.getCodigoAssunto());
             stmt = conn.prepareStatement(sql);
-            stmt.setString(1, strCodigoAssunto);
-            stmt.setString(2, passunto.getDescricaoAssunto());
+            stmt.setString(1, "%" + strCodigoAssunto + "%");
+            stmt.setString(2, "%" + passunto.getDescricaoAssunto() + "%");
             ResultSet rs = stmt.executeQuery();
             
             while(rs.next()){
                 Assunto assunto = new Assunto();
                 
                 assunto.setCodigoAssunto(rs.getInt("codigoassunto"));
-                assunto.setDescricaoAssunto(rs.getString("descricaoassuto"));
+                assunto.setDescricaoAssunto(rs.getString("descricaoassunto"));
                 
                 lstAssunto.add(assunto);
             }
