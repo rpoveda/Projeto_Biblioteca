@@ -26,10 +26,23 @@ public class DepartamentoUI extends javax.swing.JFrame {
     /**
      * Creates new form DepartamentoUI
      */
+    
+    private boolean bEditar = false;
+    private int intCodigoChefe = 0;
+    
     public DepartamentoUI() {
         initComponents();
         initComb();
         initCodigo();
+    }
+    
+    public DepartamentoUI(Departamento departamento){
+        initComponents();
+        txtNomeDepartamento.setText(departamento.getNomeDepartamento());
+        txtCodigoDepartamento.setText(Integer.toString(departamento.getCodigoDepartamento()));
+        bEditar = true;
+        intCodigoChefe = departamento.getChefeDepartamento().getNumeroMatricula();
+        initComb();
     }
     
     private void initCodigo(){
@@ -64,6 +77,7 @@ public class DepartamentoUI extends javax.swing.JFrame {
         jLabel2.setText("Código");
 
         txtCodigoDepartamento.setEditable(false);
+        txtCodigoDepartamento.setEnabled(false);
 
         jLabel3.setText("Chefe do departamento");
 
@@ -138,12 +152,23 @@ public class DepartamentoUI extends javax.swing.JFrame {
             f.setNumeroMatricula(intCodigoChefe);
             d.setNomeDepartamento(strNomeDepartamento);
             d.setChefeDepartamento(f);
-            if(new DepartamentoController().insert(d)){
-                JOptionPane.showMessageDialog(null, "Cadastro efetuado com sucesso!");
+            
+            if(bEditar){
+                d.setCodigoDepartamento(Integer.parseInt(txtCodigoDepartamento.getText()));
+                if(new DepartamentoController().alter(d))
+                    JOptionPane.showMessageDialog(null, "Departamento salvo com sucesso.");
+                else
+                    JOptionPane.showMessageDialog(null, "Nao foi possivel salvar o departamento");
             }else
             {
-                JOptionPane.showMessageDialog(null, "Nao foi possivel salvar!");
+                if(new DepartamentoController().insert(d)){
+                    JOptionPane.showMessageDialog(null, "Cadastro efetuado com sucesso!");
+                }else
+                {
+                    JOptionPane.showMessageDialog(null, "Nao foi possivel salvar!");
+                }
             }
+            
         }catch(Exception e){
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
@@ -154,10 +179,19 @@ public class DepartamentoUI extends javax.swing.JFrame {
         DefaultComboBoxModel model = (DefaultComboBoxModel) cbFuncionario.getModel();
         model.removeAllElements();
         List<Funcionario> _lstFuncionario = new FuncionarioController().selectAll();
+        int count = 0;
+        int index = 0;
         if(_lstFuncionario != null){
             for(Funcionario f : _lstFuncionario){
                 model.addElement(f.getNumeroMatricula() + " - " + f.getNomeCompleto());
+                if(f.getNumeroMatricula() == intCodigoChefe){
+                    index = count;
+                }
+                
+                count++;
             }
+            
+            cbFuncionario.setSelectedIndex(index);
         }
     }
     

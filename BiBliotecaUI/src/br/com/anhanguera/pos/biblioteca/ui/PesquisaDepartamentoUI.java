@@ -6,8 +6,10 @@ package br.com.anhanguera.pos.biblioteca.ui;
 
 import br.com.anhanguera.pos.biblioteca.controller.DepartamentoController;
 import br.com.anhanguera.pos.biblioteca.entidade.Departamento;
+import br.com.anhanguera.pos.biblioteca.entidade.Funcionario;
 import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -22,6 +24,7 @@ public class PesquisaDepartamentoUI extends javax.swing.JFrame {
     public PesquisaDepartamentoUI() {
         initComponents();
         initTable(new DepartamentoController().selectAll());
+        tblDepartamento.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 
     
@@ -57,6 +60,8 @@ public class PesquisaDepartamentoUI extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         txtDepartamento = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
+        btnRemover = new javax.swing.JButton();
+        btnEditar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Departamento");
@@ -72,6 +77,11 @@ public class PesquisaDepartamentoUI extends javax.swing.JFrame {
                 "Código", "Departamento", "Chefe Departamento"
             }
         ));
+        tblDepartamento.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblDepartamentoMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblDepartamento);
 
         jLabel1.setText("Código");
@@ -88,6 +98,22 @@ public class PesquisaDepartamentoUI extends javax.swing.JFrame {
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
+            }
+        });
+
+        btnRemover.setText("Remover");
+        btnRemover.setEnabled(false);
+        btnRemover.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoverActionPerformed(evt);
+            }
+        });
+
+        btnEditar.setText("Editar");
+        btnEditar.setEnabled(false);
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
             }
         });
 
@@ -108,12 +134,17 @@ public class PesquisaDepartamentoUI extends javax.swing.JFrame {
                                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                                     .add(layout.createSequentialGroup()
                                         .add(jLabel1)
-                                        .add(0, 135, Short.MAX_VALUE))
+                                        .add(0, 299, Short.MAX_VALUE))
                                     .add(txtCodigo))
                                 .add(18, 18, 18)
                                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                                     .add(jLabel2)
-                                    .add(txtDepartamento, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 190, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))))
+                                    .add(txtDepartamento, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 190, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
+                                .add(0, 0, Short.MAX_VALUE)
+                                .add(btnRemover)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(btnEditar)))
                         .addContainerGap())))
         );
         layout.setVerticalGroup(
@@ -132,8 +163,11 @@ public class PesquisaDepartamentoUI extends javax.swing.JFrame {
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(jButton1)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
-                .addContainerGap())
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 136, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 26, Short.MAX_VALUE)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(btnRemover)
+                    .add(btnEditar)))
         );
 
         pack();
@@ -159,6 +193,33 @@ public class PesquisaDepartamentoUI extends javax.swing.JFrame {
     private void txtCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCodigoActionPerformed
+
+    private void tblDepartamentoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDepartamentoMouseClicked
+        btnEditar.setEnabled(true);
+        btnRemover.setEnabled(true);
+    }//GEN-LAST:event_tblDepartamentoMouseClicked
+
+    private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
+        if(JOptionPane.showConfirmDialog(this, "Deseja realmente excluir esse departamento?") == JOptionPane.YES_OPTION){
+            int intCodigoDepartamento = (Integer)tblDepartamento.getModel().getValueAt(tblDepartamento.getSelectedRow(), 0);
+            
+            if(new DepartamentoController().delete(intCodigoDepartamento)){
+                JOptionPane.showMessageDialog(null, "Departamento deletado com sucesso.");
+                initTable(new DepartamentoController().selectAll());
+            }else
+                JOptionPane.showMessageDialog(null, "Não foi possivel deletar o departamento.");
+        }
+    }//GEN-LAST:event_btnRemoverActionPerformed
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        int intCodigoDepartamento = (Integer)tblDepartamento.getModel().getValueAt(tblDepartamento.getSelectedRow(), 0);
+        Departamento d = new Departamento();
+        d.setCodigoDepartamento(intCodigoDepartamento);
+        Funcionario f = new Funcionario();
+        d.setChefeDepartamento(f);
+        DepartamentoUI departamentoUI = new DepartamentoUI(new DepartamentoController().select(d).get(0));
+        departamentoUI.setVisible(true);
+    }//GEN-LAST:event_btnEditarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -202,6 +263,8 @@ public class PesquisaDepartamentoUI extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnEditar;
+    private javax.swing.JButton btnRemover;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
