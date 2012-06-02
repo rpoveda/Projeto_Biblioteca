@@ -20,9 +20,19 @@ public class EditoraUI extends javax.swing.JFrame {
     /**
      * Creates new form EditoraUI
      */
+    private boolean bEditar = false;
+    
     public EditoraUI() {
         initComponents();
         initCodigo();
+    }
+    
+    public EditoraUI(Editora editora){
+        initComponents();
+        txtCodigo.setText(Integer.toString(editora.getCodigoEditora()));
+        txtNomeEditora.setText(editora.getNomeEditora());
+        txtCidadeEditora.setText(editora.getCidadeEditora());
+        bEditar = true;
     }
     
     private void initCodigo(){
@@ -54,6 +64,7 @@ public class EditoraUI extends javax.swing.JFrame {
         jLabel1.setText("Código");
 
         txtCodigo.setEditable(false);
+        txtCodigo.setEnabled(false);
 
         jLabel2.setText("Nome");
 
@@ -133,11 +144,20 @@ public class EditoraUI extends javax.swing.JFrame {
         editora.setNomeEditora(txtNomeEditora.getText());
         editora.setCidadeEditora(txtCidadeEditora.getText());
         
-        if(new EditoraController().insert(editora))
-        {
-            JOptionPane.showMessageDialog(null, "Editora salva com sucesso.");
-        }else{
-            JOptionPane.showMessageDialog(null, "Não foi póssivel salvar a editora.");
+        
+        if(bEditar){
+            if(new EditoraController().alter(editora))
+                JOptionPane.showMessageDialog(null, "Editora salva com sucesso");
+            else
+                JOptionPane.showMessageDialog(null, "Nao foi possivel salvar a editora");
+        }
+        else{
+            if(new EditoraController().insert(editora))
+            {
+                JOptionPane.showMessageDialog(null, "Editora salva com sucesso.");
+            }else{
+                JOptionPane.showMessageDialog(null, "Nao foi possivel salvar a editora.");
+            }
         }
     }//GEN-LAST:event_btnGravarActionPerformed
 

@@ -7,6 +7,7 @@ package br.com.anhanguera.pos.biblioteca.ui;
 import br.com.anhanguera.pos.biblioteca.controller.EditoraController;
 import br.com.anhanguera.pos.biblioteca.entidade.Editora;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
@@ -54,6 +55,8 @@ public class PesquisaEditoraUI extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         txtCidadeEditora = new javax.swing.JTextField();
         btnFiltro = new javax.swing.JButton();
+        btnRemover = new javax.swing.JButton();
+        btnEditar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Pesquisa Editora");
@@ -66,6 +69,11 @@ public class PesquisaEditoraUI extends javax.swing.JFrame {
                 "Código", "Nome", "Cidade"
             }
         ));
+        tblEditora.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblEditoraMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblEditora);
 
         jLabel1.setText("Código");
@@ -81,6 +89,22 @@ public class PesquisaEditoraUI extends javax.swing.JFrame {
             }
         });
 
+        btnRemover.setText("Remover");
+        btnRemover.setEnabled(false);
+        btnRemover.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoverActionPerformed(evt);
+            }
+        });
+
+        btnEditar.setText("Editar");
+        btnEditar.setEnabled(false);
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
+
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -88,26 +112,33 @@ public class PesquisaEditoraUI extends javax.swing.JFrame {
             .add(layout.createSequentialGroup()
                 .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .add(layout.createSequentialGroup()
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(jLabel1)
-                            .add(txtCodigo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 58, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                        .add(18, 18, 18)
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(jLabel2)
+                            .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                             .add(layout.createSequentialGroup()
-                                .add(1, 1, 1)
-                                .add(txtNomeEditora, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 112, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
-                        .add(18, 18, 18)
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(txtCidadeEditora, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 121, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                            .add(jLabel3))
-                        .add(0, 60, Short.MAX_VALUE))
+                                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                    .add(jLabel1)
+                                    .add(txtCodigo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 58, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                                .add(18, 18, 18)
+                                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                    .add(jLabel2)
+                                    .add(layout.createSequentialGroup()
+                                        .add(1, 1, 1)
+                                        .add(txtNomeEditora, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 112, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                                .add(18, 18, 18)
+                                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                    .add(txtCidadeEditora, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 121, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                    .add(jLabel3))
+                                .add(0, 216, Short.MAX_VALUE))
+                            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
+                                .add(0, 0, Short.MAX_VALUE)
+                                .add(btnFiltro)))
+                        .addContainerGap())
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                         .add(0, 0, Short.MAX_VALUE)
-                        .add(btnFiltro)))
-                .addContainerGap())
+                        .add(btnRemover)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(btnEditar))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -125,8 +156,11 @@ public class PesquisaEditoraUI extends javax.swing.JFrame {
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(btnFiltro)
                 .add(20, 20, 20)
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 177, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 133, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(21, 21, 21)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(btnRemover)
+                    .add(btnEditar)))
         );
 
         pack();
@@ -141,6 +175,31 @@ public class PesquisaEditoraUI extends javax.swing.JFrame {
         initTable(new EditoraController().select(editora));
         editora = null;
     }//GEN-LAST:event_btnFiltroActionPerformed
+
+    private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
+        if(JOptionPane.showConfirmDialog(this, "Deseja excluir a editora selecionada?") == JOptionPane.YES_OPTION){
+            int intCodigoEditora = (Integer)tblEditora.getModel().getValueAt(tblEditora.getSelectedRow(), 0);
+            
+            if(new EditoraController().delete(intCodigoEditora)){
+                JOptionPane.showMessageDialog(null, "Editora deletada com sucesso.");
+                initTable(new EditoraController().selectAll());
+            }else
+                JOptionPane.showMessageDialog(null, "Nao foi possivel deletar a editora");
+        }
+    }//GEN-LAST:event_btnRemoverActionPerformed
+
+    private void tblEditoraMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblEditoraMouseClicked
+        btnEditar.setEnabled(true);
+        btnRemover.setEnabled(true);
+    }//GEN-LAST:event_tblEditoraMouseClicked
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        int intCodigoEditora = (Integer)tblEditora.getModel().getValueAt(tblEditora.getSelectedRow(), 0);
+        Editora editora = new Editora();
+        editora.setCodigoEditora(intCodigoEditora);
+        EditoraUI editoraUI = new EditoraUI(new EditoraController().select(editora).get(0));
+        editoraUI.setVisible(true);
+    }//GEN-LAST:event_btnEditarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -184,7 +243,9 @@ public class PesquisaEditoraUI extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnFiltro;
+    private javax.swing.JButton btnRemover;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
