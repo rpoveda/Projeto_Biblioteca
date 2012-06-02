@@ -71,7 +71,7 @@ public class ExemplarUI extends javax.swing.JFrame {
         btnCad = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Cadastro Exemplar");
 
         jLabel1.setText("Obra");

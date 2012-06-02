@@ -52,7 +52,7 @@ public class Emprestimo extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         ccbTest = new javax.swing.JComboBox();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         btnEmprestimo.setText("Salvar");
         btnEmprestimo.addActionListener(new java.awt.event.ActionListener() {
@@ -85,7 +85,7 @@ public class Emprestimo extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtCodigoFuncionario, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)))
+                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 230, Short.MAX_VALUE)))
                     .addComponent(btnEmprestimo, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(ccbTest, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())

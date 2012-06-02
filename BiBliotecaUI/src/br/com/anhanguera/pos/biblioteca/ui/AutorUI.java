@@ -59,7 +59,7 @@ public class AutorUI extends javax.swing.JFrame {
         btnCancel = new javax.swing.JButton();
         btnGravar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Autor");
 
         txtCodigo.setEditable(false);
@@ -120,8 +120,6 @@ public class AutorUI extends javax.swing.JFrame {
                     .addComponent(btnCancel))
                 .addContainerGap(15, Short.MAX_VALUE))
         );
-
-        getAccessibleContext().setAccessibleName("Autor");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

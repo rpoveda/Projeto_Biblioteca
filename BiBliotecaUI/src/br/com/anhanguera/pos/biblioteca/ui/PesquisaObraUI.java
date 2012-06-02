@@ -4,6 +4,7 @@
  */
 package br.com.anhanguera.pos.biblioteca.ui;
 
+import br.com.anhanguera.pos.biblioteca.controller.AutorController;
 import br.com.anhanguera.pos.biblioteca.controller.EditoraController;
 import br.com.anhanguera.pos.biblioteca.controller.ObraController;
 import br.com.anhanguera.pos.biblioteca.entidade.Autor;
@@ -11,6 +12,8 @@ import br.com.anhanguera.pos.biblioteca.entidade.Editora;
 import br.com.anhanguera.pos.biblioteca.entidade.Obra;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -27,6 +30,8 @@ public class PesquisaObraUI extends javax.swing.JFrame {
         intiTable(new ObraController().selectAll());
         initComboAutor();
         initComboEditora();
+        
+        tblObra.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
     
     private void intiTable(List<Obra> _lstObra){
@@ -41,13 +46,16 @@ public class PesquisaObraUI extends javax.swing.JFrame {
     
     private void initComboAutor(){
         DefaultComboBoxModel model = (DefaultComboBoxModel) cbxAutor.getModel();
-        //List<Autor> _lstAutor = new AutorController().selectAll();
+        List<Autor> _lstAutor = new AutorController().selectAll();
+        model.addElement(null);
+        for(Autor autor : _lstAutor)
+            model.addElement(autor.getCodigoAutor() + "-" + autor.getNomeAutor());
     }
     
     private void initComboEditora(){
         DefaultComboBoxModel model = (DefaultComboBoxModel) cbxEditora.getModel();
         List<Editora> _lstEditora = new EditoraController().selectAll();
-        
+        model.addElement(null);
         for(Editora editora : _lstEditora){
             model.addElement(editora.getCodigoEditora() + "-" + editora.getNomeEditora());
         }
@@ -78,10 +86,12 @@ public class PesquisaObraUI extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         cbxEditora = new javax.swing.JComboBox();
         btnFiltro = new javax.swing.JButton();
+        btnEditar = new javax.swing.JButton();
+        btnRemover = new javax.swing.JButton();
 
         jLabel1.setText("jLabel1");
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Obra");
 
         tblObra.setModel(new javax.swing.table.DefaultTableModel(
@@ -100,6 +110,11 @@ public class PesquisaObraUI extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        tblObra.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblObraMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblObra);
 
         jLabel2.setText("Código");
@@ -110,7 +125,7 @@ public class PesquisaObraUI extends javax.swing.JFrame {
 
         jLabel5.setText("Situação");
 
-        cbxSituacao.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Disponível", "Emprestado" }));
+        cbxSituacao.setModel(new javax.swing.DefaultComboBoxModel(new String[] { " ", "Disponível", "Emprestado" }));
 
         jLabel6.setText("Autor");
 
@@ -123,55 +138,73 @@ public class PesquisaObraUI extends javax.swing.JFrame {
             }
         });
 
+        btnEditar.setText("Editar");
+        btnEditar.setEnabled(false);
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
+
+        btnRemover.setText("Remover");
+        btnRemover.setEnabled(false);
+        btnRemover.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoverActionPerformed(evt);
+            }
+        });
+
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
-                .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jScrollPane1)
                     .add(layout.createSequentialGroup()
+                        .addContainerGap()
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 576, Short.MAX_VALUE)
                             .add(layout.createSequentialGroup()
-                                .add(jLabel2)
-                                .add(27, 27, 27)
-                                .add(jLabel3))
-                            .add(layout.createSequentialGroup()
-                                .add(jLabel5)
-                                .add(87, 87, 87)
-                                .add(jLabel6)))
-                        .add(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
-            .add(layout.createSequentialGroup()
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, layout.createSequentialGroup()
-                        .add(cbxSituacao, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(cbxAutor, 0, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, layout.createSequentialGroup()
-                        .add(txtCodigo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 63, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                    .add(layout.createSequentialGroup()
+                                        .add(jLabel2)
+                                        .add(27, 27, 27)
+                                        .add(jLabel3))
+                                    .add(layout.createSequentialGroup()
+                                        .add(jLabel5)
+                                        .add(87, 87, 87)
+                                        .add(jLabel6)))
+                                .add(0, 0, Short.MAX_VALUE))))
+                    .add(layout.createSequentialGroup()
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false)
+                            .add(org.jdesktop.layout.GroupLayout.LEADING, layout.createSequentialGroup()
+                                .add(cbxSituacao, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(cbxAutor, 0, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .add(org.jdesktop.layout.GroupLayout.LEADING, layout.createSequentialGroup()
+                                .add(txtCodigo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 63, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                                .add(txtTitulo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 152, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                        .add(txtTitulo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 152, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(layout.createSequentialGroup()
-                        .add(5, 5, 5)
-                        .add(txtAnoPublicacao, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 91, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())
-                    .add(layout.createSequentialGroup()
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                             .add(layout.createSequentialGroup()
                                 .add(cbxEditora, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .add(btnFiltro))
                             .add(layout.createSequentialGroup()
-                                .add(jLabel4)
-                                .add(0, 0, Short.MAX_VALUE)))
-                        .addContainerGap())
-                    .add(layout.createSequentialGroup()
-                        .add(jLabel7)
-                        .addContainerGap())))
+                                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                    .add(jLabel4)
+                                    .add(layout.createSequentialGroup()
+                                        .add(5, 5, 5)
+                                        .add(txtAnoPublicacao, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 91, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                                    .add(jLabel7))
+                                .add(0, 0, Short.MAX_VALUE))))
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
+                        .add(0, 0, Short.MAX_VALUE)
+                        .add(btnRemover)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                        .add(btnEditar)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -198,8 +231,11 @@ public class PesquisaObraUI extends javax.swing.JFrame {
                     .add(cbxEditora, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(btnFiltro))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 165, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 128, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(14, 14, 14)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(btnEditar)
+                    .add(btnRemover)))
         );
 
         pack();
@@ -211,12 +247,16 @@ public class PesquisaObraUI extends javax.swing.JFrame {
         Editora editora = new Editora();
         
         //codigo editora
+        if(cbxEditora.getSelectedIndex() != 0){
         int intCodigoEditora = Integer.parseInt(cbxEditora.getSelectedItem().toString().split("-")[0]);
         editora.setCodigoEditora(intCodigoEditora);
+        }
         
         //codigo autor
-        //int intCodigoAutor = Integer.parseInt(cbxAutor.getSelectedItem().toString().split("-")[0]);
-        //autor.setCodigoAutor(intCodigoAutor);
+        if(cbxAutor.getSelectedIndex() != 0){
+        int intCodigoAutor = Integer.parseInt(cbxAutor.getSelectedItem().toString().split("-")[0]);
+        autor.setCodigoAutor(intCodigoAutor);
+        }
         
         obra.setAutorPrincipal(autor);
         obra.setEditoraObra(editora);
@@ -226,11 +266,40 @@ public class PesquisaObraUI extends javax.swing.JFrame {
         if(!txtAnoPublicacao.getText().equals(""))
             obra.setAnoPublicacao(Integer.parseInt(txtAnoPublicacao.getText()));
         obra.setTituloObra(txtTitulo.getText());
-        obra.setSituacaoObra(cbxSituacao.getSelectedItem().toString());
+        if(cbxSituacao.getSelectedIndex() != 0)
+            obra.setSituacaoObra(cbxSituacao.getSelectedItem().toString());
         
         
         intiTable(new ObraController().select(obra));
     }//GEN-LAST:event_btnFiltroActionPerformed
+
+    private void tblObraMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblObraMouseClicked
+        btnEditar.setEnabled(true);
+        btnRemover.setEnabled(true);
+    }//GEN-LAST:event_tblObraMouseClicked
+
+    private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
+        int intCodigoObra = (Integer)tblObra.getModel().getValueAt(tblObra.getSelectedRow(), 0);
+        
+        if(new ObraController().delete(intCodigoObra))
+        {
+            JOptionPane.showMessageDialog(null, "Obra deletada com sucesso");
+            intiTable(new ObraController().selectAll());
+        }else
+            JOptionPane.showMessageDialog(null, "Nao foi possivel deletar a obra.");
+    }//GEN-LAST:event_btnRemoverActionPerformed
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        Obra obra = new Obra();
+        int intCodigoObra = (Integer)tblObra.getModel().getValueAt(tblObra.getSelectedRow(), 0);
+        
+        obra.setCodigoObra(intCodigoObra);
+        obra.setAutorPrincipal(new Autor());
+        obra.setEditoraObra(new Editora());
+        
+        ObraUI obraUI = new ObraUI(new ObraController().select(obra).get(0));
+        obraUI.setVisible(true);
+    }//GEN-LAST:event_btnEditarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -274,7 +343,9 @@ public class PesquisaObraUI extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnFiltro;
+    private javax.swing.JButton btnRemover;
     private javax.swing.JComboBox cbxAutor;
     private javax.swing.JComboBox cbxEditora;
     private javax.swing.JComboBox cbxSituacao;

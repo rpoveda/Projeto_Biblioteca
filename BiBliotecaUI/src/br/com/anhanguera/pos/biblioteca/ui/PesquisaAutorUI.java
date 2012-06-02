@@ -72,7 +72,7 @@ public class PesquisaAutorUI extends javax.swing.JFrame {
         btnAlterar = new javax.swing.JButton();
         btnIncluir = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         tblAutor.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -169,8 +169,6 @@ public class PesquisaAutorUI extends javax.swing.JFrame {
                     .addComponent(btnIncluir))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-
-        jLabel2.getAccessibleContext().setAccessibleName("Autor");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

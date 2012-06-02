@@ -4,6 +4,7 @@
  */
 package br.com.anhanguera.pos.biblioteca.ui;
 
+import br.com.anhanguera.pos.biblioteca.controller.AutorController;
 import br.com.anhanguera.pos.biblioteca.controller.EditoraController;
 import br.com.anhanguera.pos.biblioteca.controller.ObraController;
 import br.com.anhanguera.pos.biblioteca.controller.UtilController;
@@ -24,6 +25,10 @@ public class ObraUI extends javax.swing.JFrame {
     /**
      * Creates new form ObraUI
      */
+    private boolean bEditar = false;
+    private int intCodigoAutor = 0;
+    private int intCodigoEditora = 0;
+
     public ObraUI() {
         initComponents();
         initAutor();
@@ -31,16 +36,52 @@ public class ObraUI extends javax.swing.JFrame {
         initCodigo();
     }
     
+    public ObraUI(Obra obra){
+        initComponents();
+        intCodigoAutor = obra.getAutorPrincipal().getCodigoAutor();
+        intCodigoEditora = obra.getEditoraObra().getCodigoEditora();
+        
+        initAutor();
+        initEditora();
+        
+        txtCodigoObra.setText(Integer.toString(obra.getCodigoObra()));
+        txtTituloObra.setText(obra.getTituloObra());
+        txtAnoPublicacao.setText(Integer.toString(obra.getAnoPublicacao()));
+        bEditar = true;
+        
+    }
+    
     private void initAutor(){
         DefaultComboBoxModel model = (DefaultComboBoxModel) cbxAutor.getModel();
+        model.removeAllElements();
+        int count =0;
+        int index = 0;
+        for(Autor autor : new AutorController().selectAll()){
+            model.addElement(autor.getCodigoAutor() + "-" + autor.getNomeAutor());
+            
+            if(autor.getCodigoAutor() == intCodigoAutor)
+                index = count;
+            
+            count++;
+        }
         
+        cbxAutor.setSelectedIndex(index);
     }
     private void initEditora(){
         DefaultComboBoxModel model = (DefaultComboBoxModel) cbxEditora.getModel();
         List<Editora> _lstEditora = new EditoraController().selectAll();
+        int count = 0;
+        int index = 0;
         for(Editora editora : _lstEditora){
             model.addElement(editora.getCodigoEditora() + "-" + editora.getNomeEditora());
+            
+            if(editora.getCodigoEditora() == intCodigoEditora)
+                index = count;
+            
+            count++;
         }
+        
+        cbxEditora.setSelectedIndex(index);
     }
     private void initCodigo(){
         int codigo = new UtilController().nextId("obra", "codigoobra");
@@ -71,12 +112,13 @@ public class ObraUI extends javax.swing.JFrame {
         btnGravar = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Editora");
 
         jLabel1.setText("Código");
 
         txtCodigoObra.setEditable(false);
+        txtCodigoObra.setEnabled(false);
 
         jLabel2.setText("Titulo");
 
@@ -191,15 +233,26 @@ public class ObraUI extends javax.swing.JFrame {
         obra.setAnoPublicacao(Integer.parseInt(txtAnoPublicacao.getText()));
         //obra.setAnoPublicacao(UtilController.recebeNumerico(txtAnoPublicacao, "Ano de publicação."));
         obra.setSituacaoObra(cbxSituacao.getSelectedItem().toString());
-        autor.setCodigoAutor(1);
+        autor.setCodigoAutor(Integer.parseInt(cbxAutor.getSelectedItem().toString().split("-")[0].trim()));
         obra.setAutorPrincipal(autor);
         editora.setCodigoEditora(intCodigoeditora);
         obra.setEditoraObra(editora);
         
-        if(new ObraController().insert(obra))
-            JOptionPane.showMessageDialog(null, "Obra cadastrada com sucesso.");
-        else
-            JOptionPane.showMessageDialog(null, "Não foi possível salvar a obra.");
+        if(bEditar){
+            obra.setCodigoObra(Integer.parseInt(txtCodigoObra.getText()));
+            
+            if(new ObraController().alter(obra))
+                JOptionPane.showMessageDialog(null, "Obra salva com sucesso.");
+            else
+                JOptionPane.showMessageDialog(null, "Nao foi possivel salvar a obra.");
+            
+        }
+        else{
+            if(new ObraController().insert(obra))
+                JOptionPane.showMessageDialog(null, "Obra cadastrada com sucesso.");
+            else
+                JOptionPane.showMessageDialog(null, "Não foi possível salvar a obra.");
+        }
     }//GEN-LAST:event_btnGravarActionPerformed
 
     private void txtAnoPublicacaoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAnoPublicacaoFocusLost

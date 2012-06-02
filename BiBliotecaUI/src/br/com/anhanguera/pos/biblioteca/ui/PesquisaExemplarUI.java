@@ -58,7 +58,7 @@ public class PesquisaExemplarUI extends javax.swing.JFrame {
         cbxSituacao = new javax.swing.JComboBox();
         jLabel4 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         tblExemplar.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {

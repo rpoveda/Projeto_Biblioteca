@@ -57,7 +57,7 @@ public class FuncionarioUI extends javax.swing.JFrame {
         btnCancel = new javax.swing.JButton();
         btnCad = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Cadastro de funcionario");
 
         jLabel1.setText("Número de matricula");

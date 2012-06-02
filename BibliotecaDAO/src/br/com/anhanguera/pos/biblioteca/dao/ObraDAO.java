@@ -48,8 +48,8 @@ public class ObraDAO {
     
     public boolean alter(Obra obra) throws SQLException{
         try{
-            String sql = "update obra set tituloora = ?, codigoautorprincipal=?, " +
-                    "anopublicacao = ?, situacaoobra = ?, codigoeditoraobra = ? where "+
+            String sql = "update obra set tituloobra = ?, codigoautorprincipal=?, " +
+                    "anopublicacaoobra = ?, situacaoobra = ?, codigoeditoraobra = ? where "+
                     "codigoobra = ?";
             stmt = conn.prepareStatement(sql);
             stmt.setString(1, obra.getTituloObra());
