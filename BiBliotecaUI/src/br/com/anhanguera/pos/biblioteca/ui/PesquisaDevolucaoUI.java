@@ -5,9 +5,13 @@
 package br.com.anhanguera.pos.biblioteca.ui;
 
 import br.com.anhanguera.pos.biblioteca.controller.DevolucaoController;
+import br.com.anhanguera.pos.biblioteca.controller.ExemplarController;
 import br.com.anhanguera.pos.biblioteca.entidade.Devolucao;
 import br.com.anhanguera.pos.biblioteca.entidade.Exemplar;
+import br.com.anhanguera.pos.biblioteca.entidade.Obra;
+import br.com.anhanguera.pos.biblioteca.entidade.Usuario;
 import java.util.List;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
@@ -25,6 +29,7 @@ public class PesquisaDevolucaoUI extends javax.swing.JFrame {
         initComponents();
         initTable(new DevolucaoController().selectAll());
         tblDevolucao.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        initCbkExemplar();
     }
     
     private void initTable(List<Devolucao> plstDevolucao){
@@ -32,6 +37,14 @@ public class PesquisaDevolucaoUI extends javax.swing.JFrame {
         model.setNumRows(0);
         for(Devolucao devolucao : plstDevolucao){
             model.addRow(new Object[] { devolucao.getCodigoDevolucao(), devolucao.getExemplar().getCodigoExemplar() ,devolucao.getExemplar().getObra().getTituloObra(), devolucao.getDataDevolucao(), devolucao.getUsuarioDevoluca().getNomeUsuario() });
+        }
+    }
+    
+    private void initCbkExemplar(){
+        DefaultComboBoxModel model = (DefaultComboBoxModel)cbxExemplar.getModel();
+        
+        for(Exemplar exemplar : new ExemplarController().selectAll()){
+            model.addElement(exemplar.getCodigoExemplar() + "-" + exemplar.getObra().getTituloObra());
         }
     }
 
@@ -66,6 +79,11 @@ public class PesquisaDevolucaoUI extends javax.swing.JFrame {
         jLabel3.setText("Usuário");
 
         btnFiltrar.setText("Filtrar");
+        btnFiltrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFiltrarActionPerformed(evt);
+            }
+        });
 
         tblDevolucao.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -191,6 +209,29 @@ public class PesquisaDevolucaoUI extends javax.swing.JFrame {
         DevolucaoUI objDevolucaoUI = new DevolucaoUI(lst.get(0));
         objDevolucaoUI.setVisible(true);
     }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void btnFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFiltrarActionPerformed
+        Devolucao devolucao = new Devolucao();
+        Exemplar exemplar = new Exemplar();
+        Obra obra = new Obra();
+        Usuario usuario = new Usuario();
+        
+        try{
+            devolucao.setCodigoDevolucao(Integer.parseInt(txtCodigo.getText()));
+        }catch(Exception e){
+            
+        }
+        String[] aDadosObra = cbxExemplar.getSelectedItem().toString().split("-");
+        exemplar.setCodigoExemplar(Integer.parseInt(aDadosObra[0]));
+        obra.setTituloObra(aDadosObra[1]);
+        usuario.setNomeUsuario(txtUsuario.getText());
+        exemplar.setObra(obra);
+        devolucao.setExemplar(exemplar);
+        devolucao.setUsuarioDevoluca(usuario);
+        
+        initTable(new DevolucaoController().select(devolucao));
+        
+    }//GEN-LAST:event_btnFiltrarActionPerformed
 
     /**
      * @param args the command line arguments
