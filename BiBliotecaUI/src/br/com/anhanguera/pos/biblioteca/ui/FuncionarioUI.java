@@ -21,9 +21,22 @@ public class FuncionarioUI extends javax.swing.JFrame {
     /**
      * Creates new form FuncionarioUI
      */
+    private boolean bEditar = false;
+    private int intCodigoFuncionario = 0;
+    private int intCodigoDepartamento = 0;
     public FuncionarioUI() {
         initComponents();
         initCombo();
+    }
+    
+    public FuncionarioUI(Funcionario funcionario){
+        initComponents();
+        intCodigoFuncionario = funcionario.getNumeroMatricula();
+        intCodigoDepartamento = funcionario.getDepartamento().getCodigoDepartamento();
+        initCombo();
+        txtNomeCompleto.setText(funcionario.getNomeCompleto());
+        txtNumMatricula.setText(Integer.toString(funcionario.getNumeroMatricula()));
+        bEditar = true;
     }
 
     /**
@@ -122,11 +135,19 @@ public class FuncionarioUI extends javax.swing.JFrame {
             d.setCodigoDepartamento(intCodigoDepartamento);
             f.setDepartamento(d);
 
+            
+            if(bEditar){
+                if(new FuncionarioController().alter(f))
+                    JOptionPane.showMessageDialog(null, "Funcionario salvo com sucesso.");
+                else
+                    JOptionPane.showMessageDialog(null, "Nao foi possivel salvar o funcionario.");
+            }else{
             if(new FuncionarioController().insert(f)){
                 JOptionPane.showMessageDialog(null, "Funcionario salvo com sucesso");
             }else
             {
                 JOptionPane.showMessageDialog(null,"Nao foi possivel salvar");
+            }
         }
         }catch(Exception e){
             JOptionPane.showMessageDialog(null, e.getMessage());
@@ -139,11 +160,19 @@ public class FuncionarioUI extends javax.swing.JFrame {
         List<Departamento> _lstDepartamento = new DepartamentoController().selectAll();
         comboModel.removeAllElements();
         
+        int count = 0;
+        int index = 0;
         if(_lstDepartamento != null){
             for(Departamento d : _lstDepartamento){
                comboModel.addElement(d.getCodigoDepartamento() + " - " + d.getNomeDepartamento()); 
+               
+               if(d.getCodigoDepartamento() == intCodigoDepartamento)
+                   index = count;
+               count++;
             }
         }
+        
+        cbDepartamento.setSelectedIndex(index);
     }
     
     /**

@@ -11,6 +11,7 @@ import br.com.anhanguera.pos.biblioteca.entidade.Funcionario;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -26,17 +27,8 @@ public class PesquisaFuncionarioUI extends javax.swing.JFrame {
         initComponents();
         initTable(new FuncionarioController().selectAll());
         initComboDepartamento(new DepartamentoController().selectAll());
-        /*
-          ArrayList lista= sckcli.solicitaConsulta();  
-        DefaultTableModel tabmodel = (DefaultTableModel)jtbitens.getModel();   
-        tabmodel.setNumRows(0);  
-        for (int i=0;i<lista.size();i++){  
-         String ln = (String) lista.get(i);  
-         String resln[] = ln.split(";");  
-           
-         tabmodel.addRow(new Object[]{resln[0],resln[1],resln[2],resln[3]});  
-        } 
-         */
+        
+        tblFuncionario.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
     
     private void initTable(List<Funcionario> _lstFuncionario){
@@ -45,7 +37,7 @@ public class PesquisaFuncionarioUI extends javax.swing.JFrame {
             model.setNumRows(0);
             if(_lstFuncionario != null){
                 for(Funcionario f : _lstFuncionario){
-                    model.addRow(new Object[]{f.getNumeroMatricula(), f.getNomeCompleto(), f.getDepartamento().getNomeDepartamento(), f.getDepartamento().getChefeDepartamento().getNomeCompleto()});
+                    model.addRow(new Object[]{f.getNumeroMatricula(), f.getNomeCompleto(), f.getDepartamento().getCodigoDepartamento(), f.getDepartamento().getNomeDepartamento(), f.getDepartamento().getChefeDepartamento().getNomeCompleto()});
                 }
             }else{
                 JOptionPane.showMessageDialog(null,"Sem retorno");
@@ -89,27 +81,34 @@ public class PesquisaFuncionarioUI extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         txtRegistro = new javax.swing.JTextField();
         btnFiltro = new javax.swing.JButton();
+        btnEditar = new javax.swing.JButton();
+        btnRemover = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Funcionarios");
 
         tblFuncionario.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Num. Registro", "Nome", "Departamento", "Chefe"
+                "Num. Registro", "Nome", "Cod. Departamento", "Departamento", "Chefe"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                true, false, true, true
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
+            }
+        });
+        tblFuncionario.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblFuncionarioMouseClicked(evt);
             }
         });
         jScrollPane1.setViewportView(tblFuncionario);
@@ -127,6 +126,22 @@ public class PesquisaFuncionarioUI extends javax.swing.JFrame {
             }
         });
 
+        btnEditar.setText("Editar");
+        btnEditar.setEnabled(false);
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
+
+        btnRemover.setText("Remover");
+        btnRemover.setEnabled(false);
+        btnRemover.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoverActionPerformed(evt);
+            }
+        });
+
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -135,24 +150,30 @@ public class PesquisaFuncionarioUI extends javax.swing.JFrame {
                 .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(layout.createSequentialGroup()
-                        .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 470, Short.MAX_VALUE)
+                        .add(btnFiltro)
+                        .add(0, 0, Short.MAX_VALUE))
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
+                        .add(0, 0, Short.MAX_VALUE)
+                        .add(btnRemover)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(btnEditar)
                         .addContainerGap())
-                    .add(layout.createSequentialGroup()
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                             .add(txtRegistro, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 134, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                             .add(jLabel2))
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 88, Short.MAX_VALUE)
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
                             .add(txtNome, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 134, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                             .add(jLabel1))
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 88, Short.MAX_VALUE)
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                             .add(jLabel3)
                             .add(cbDepartamento, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                         .add(16, 16, 16))
                     .add(layout.createSequentialGroup()
-                        .add(btnFiltro)
-                        .add(0, 0, Short.MAX_VALUE))))
+                        .add(jScrollPane1)
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -169,9 +190,12 @@ public class PesquisaFuncionarioUI extends javax.swing.JFrame {
                     .add(txtNome, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .add(18, 18, 18)
                 .add(btnFiltro)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 188, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 10, Short.MAX_VALUE)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 149, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(btnEditar)
+                    .add(btnRemover)))
         );
 
         pack();
@@ -199,6 +223,36 @@ public class PesquisaFuncionarioUI extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
     }//GEN-LAST:event_btnFiltroActionPerformed
+
+    private void tblFuncionarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblFuncionarioMouseClicked
+        btnEditar.setEnabled(true);
+        btnRemover.setEnabled(true);
+    }//GEN-LAST:event_tblFuncionarioMouseClicked
+
+    private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
+        if(JOptionPane.showConfirmDialog(this, "Deseja excluir o funcionario selecionado?") == JOptionPane.YES_OPTION){
+            int intCodigoFuncionaro = (Integer)tblFuncionario.getModel().getValueAt(tblFuncionario.getSelectedRow(), 0);
+            
+            if(new FuncionarioController().delete(intCodigoFuncionaro)){
+                JOptionPane.showMessageDialog(null, "Funcionario delete com sucesso.");
+                initTable(new FuncionarioController().selectAll());
+            }else
+                JOptionPane.showMessageDialog(null, "Nao foi possivel deletar o sucesso.");
+        }
+    }//GEN-LAST:event_btnRemoverActionPerformed
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        Funcionario funcionario = new Funcionario();
+        Departamento departamento = new Departamento();
+        
+        int intCodigoFuncionario = (Integer)tblFuncionario.getModel().getValueAt(tblFuncionario.getSelectedRow(), 0);
+        int intCodigoDepartamento = (Integer)tblFuncionario.getModel().getValueAt(tblFuncionario.getSelectedRow(), 2);
+        funcionario.setNumeroMatricula(intCodigoDepartamento);
+        departamento.setCodigoDepartamento(intCodigoDepartamento);
+        funcionario.setDepartamento(departamento);
+        FuncionarioUI funcionarioUI = new FuncionarioUI(new FuncionarioController().select(funcionario).get(0));
+        funcionarioUI.setVisible(true);
+    }//GEN-LAST:event_btnEditarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -242,7 +296,9 @@ public class PesquisaFuncionarioUI extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnFiltro;
+    private javax.swing.JButton btnRemover;
     private javax.swing.JComboBox cbDepartamento;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
