@@ -13,14 +13,14 @@ public class ExemplarController {
     public static String msg = "O campo {CAMPO} é obrigatório.";
     
     private static boolean isValid(Exemplar e, boolean bValidaCodigo){
-        if(bValidaCodigo && e.getCodigoExemplar() == 0)
-        { msg.replace("{CAMPO}", "Código"); return false; }
-        else if (e.getObra().getCodigoObra() == 0)
+        //if((bValidaCodigo) && e.getCodigoExemplar() == 0)
+        //{ msg.replace("{CAMPO}", "Código"); return false; }
+        if (e.getObra().getCodigoObra() == 0)
         { msg.replace("{CAMPO}", "Obra"); return false; }
-        else if (e.getSituacaoExemplar().equals(null))
+        else if (e.getSituacaoExemplar().equals(""))
         { msg.replace("{CAMPO}", "Situação"); return false; }
         else
-            return false;
+            return true;
     }
 
     public ExemplarController(){ }

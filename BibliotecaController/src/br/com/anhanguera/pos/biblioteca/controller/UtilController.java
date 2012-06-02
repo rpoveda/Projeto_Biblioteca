@@ -39,12 +39,13 @@ public class UtilController {
         return new UtilDAO().nextId(table, field);
     }
     
-    public static Date convertDate(String pStrDate){
+    public static java.util.Date convertDate(String pStrDate){
         try{
             DateFormat form = new SimpleDateFormat("dd/MM/yyyy");
-            Date data = new Date(form.parse(pStrDate).getTime());
+            java.util.Date data = new java.util.Date(form.parse(pStrDate).getTime());
             return data;
         }catch(Exception e){
+            System.out.println(e.getMessage());
             return null;
         }
     }
@@ -67,6 +68,7 @@ public class UtilController {
             Date newDate = form.parse(date.toString());
             return (form.format(newDate));
         }catch(Exception e){
+             System.out.println(e.getMessage());
             return null;
         }
     }

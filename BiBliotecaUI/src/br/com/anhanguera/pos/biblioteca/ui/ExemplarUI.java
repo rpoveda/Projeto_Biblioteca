@@ -22,18 +22,35 @@ public class ExemplarUI extends javax.swing.JFrame {
     /**
      * Creates new form ExemplarUI
      */
+    private boolean bEditar = false;
+    private int intCodigoExemplar = 0;
+    
     public ExemplarUI() {
         initComponents();
         initComboObra();
     }
     
+    public ExemplarUI(Exemplar exemplar){
+        initComponents();
+        initComboObra();
+        txtDtAquisicao.setText(exemplar.getDataAquisicaoExemplar().toString());
+        intCodigoExemplar = exemplar.getCodigoExemplar();
+        bEditar = true;
+    }
+    
     private void initComboObra(){
         DefaultComboBoxModel model = (DefaultComboBoxModel) cbxObra.getModel();
         List<Obra> _lstObra = new ObraController().selectAll();
-        
+        int count = 0;
+        int index = 0;
         for(Obra obra : _lstObra){
             model.addElement(obra.getCodigoObra() + "-" + obra.getTituloObra());
+            if(obra.getCodigoObra() == intCodigoExemplar)
+                index = count;
+            count++;
         }
+        
+        cbxObra.setSelectedIndex(index);
     }
 
     /**
@@ -131,10 +148,22 @@ public class ExemplarUI extends javax.swing.JFrame {
         exemplar.setDataAquisicaoExemplar(UtilController.convertDate(txtDtAquisicao.getText()));
         exemplar.setSituacaoExemplar(cbxSituacao.getSelectedItem().toString());
         exemplar.setObra(obra);
+        
+        if(bEditar)
+        {
+            
+            exemplar.setCodigoExemplar(intCodigoExemplar);
+            if(new ExemplarController().alter(exemplar))
+                JOptionPane.showMessageDialog(null, "Exemplar salvo com sucesso");
+            else
+                JOptionPane.showMessageDialog(null, "Nao foi possivel salvar o exemplar");
+            
+        }else{
         if(new ExemplarController().insert(exemplar))
             JOptionPane.showMessageDialog(null, "Exemplar cadastrado com sucesso.");
         else
             JOptionPane.showMessageDialog(null, "Não foi possível salvar o exemplar.");
+        }
     }//GEN-LAST:event_btnCadActionPerformed
 
     /**

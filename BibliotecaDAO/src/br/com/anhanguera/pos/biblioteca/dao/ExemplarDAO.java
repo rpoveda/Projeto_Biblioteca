@@ -44,7 +44,7 @@ public class ExemplarDAO {
             String sql = "update exemplar set dataaquisicaoexemplar = ? , situacaoexemplar = ? where "+
                     "codigoexemplar = ? and codigoobra = ?";
             stmt = conn.prepareStatement(sql);
-            stmt.setDate(1, (Date)exemplar.getDataAquisicaoExemplar());
+            stmt.setDate(1, UtilDAO.convertDataForDateSql(exemplar.getDataAquisicaoExemplar()));
             stmt.setString(2, exemplar.getSituacaoExemplar());
             stmt.setInt(3, exemplar.getCodigoExemplar());
             stmt.setInt(4, exemplar.getObra().getCodigoObra());
@@ -61,7 +61,7 @@ public class ExemplarDAO {
     
     public boolean delete(int codigoExemplar, int codigoObra) throws SQLException{
         try{
-            String sql = "delete from exemplar wherer codigoexemplar = ? and codigoobra = ?";
+            String sql = "delete from exemplar where codigoexemplar = ? and codigoobra = ?";
             stmt = conn.prepareStatement(sql);
             stmt.setInt(1, codigoExemplar);
             stmt.setInt(2, codigoObra);
